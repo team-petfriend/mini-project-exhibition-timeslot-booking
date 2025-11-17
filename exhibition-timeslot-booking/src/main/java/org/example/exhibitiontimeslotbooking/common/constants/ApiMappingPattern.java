@@ -66,4 +66,44 @@ public class ApiMappingPattern {
         public static final String BY_ID = ROOT + ID_ONLY;
         public static final String STATUS =  BY_ID + "/status";
     }
+
+    public static final class Bookings {
+        private Bookings() {}
+
+        public static final String ROOT = BASE + "/bookings";
+        public static final String ID_ONLY = "/{bookingId}";
+        public static final String BY_ID = BASE + ID_ONLY;
+        public static final String BOOKING_CANCEL = BY_ID + "/cancel";
+        public static final String BOOKING_REFUND = BY_ID + "/refund";
+
+    }
+
+    public static final class Tickets {
+        private Tickets() {}
+
+        public static final String TICKETS = Bookings.BY_ID + "/tickets";
+        public static final String ROOT = BASE + "/tickets";
+        public static final String ID_ONLY = "/{ticketId}";
+        public static final String TICKET_USE = BASE + ID_ONLY + "/use";
+        public static final String TICKET_VOID = BASE + ID_ONLY + "/void";
+        public static final String TICKET_SCAN = BASE + "/scan";
+    }
+
+    public static final class Payments {
+        private Payments() {}
+
+        public static final String ROOT = BASE+"/payments";
+        public static final String ID_ONLY = "/{paymentId}";
+        public static final String DETAIL_PAY = ROOT  + ID_ONLY;
+        public static final String REFUND_PAY  = DETAIL_PAY+"/refund";
+        public static final String WEBHOOK_PAY = ROOT + "/webhook";
+    }
+
+    public static final class Reviews {
+        private Reviews() {}
+
+        public static final String ROOT = Exhibitions.BY_ID + "/reviews";
+        public static final String BY_ID = ROOT + "/{reviewId}";
+
+    }
 }
