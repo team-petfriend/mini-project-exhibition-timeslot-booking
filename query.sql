@@ -1,0 +1,143 @@
+DROP DATABASE IF EXISTS `mini-exhibition-db`;
+CREATE DATABASE IF NOT EXISTS `mini-exhibition-db`
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `mini-exhibition-db`;
+
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS payments;
+DROP TABLE IF EXISTS tickets;
+DROP TABLE IF EXISTS bookings;
+DROP TABLE IF EXISTS timeslots;
+DROP TABLE IF EXISTS exhibitions;
+DROP TABLE IF EXISTS venues;
+DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
+
+-- 공통(유저/권한)
+CREATE TABLE users (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  login_id VARCHAR(50) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  UNIQUE KEY uk_login (login_id),
+  UNIQUE KEY uk_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE roles (
+  role_name VARCHAR(30) PRIMARY KEY
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE user_roles (
+  user_id BIGINT NOT NULL,
+  role_name VARCHAR(30) NOT NULL,
+  PRIMARY KEY(user_id, role_name),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (role_name) REFERENCES roles(role_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 전시장/전시
+CREATE TABLE venues (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(120) NOT NULL,
+  address VARCHAR(255) NULL,
+  latitude DECIMAL(10,7) NULL,
+  longitude DECIMAL(10,7) NULL,
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE exhibitions (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  venue_id BIGINT NOT NULL,
+  title VARCHAR(200) NOT NULL,
+  description TEXT NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'SCHEDULED', -- SCHEDULED/OPEN/CLOSED/CANCELED
+  capacity_policy VARCHAR(20) NOT NULL DEFAULT 'PER_SLOT', -- PER_DAY, PER_SLOT
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  FOREIGN KEY (venue_id) REFERENCES venues(id),
+  CHECK (status IN ('SCHEDULED','OPEN','CLOSED','CANCELED')),
+  CHECK (capacity_policy IN ('PER_DAY','PER_SLOT')),
+  INDEX idx_exhibitions_venue (venue_id, status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 타임슬롯
+CREATE TABLE timeslots (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  exhibition_id BIGINT NOT NULL,
+  start_time DATETIME(6) NOT NULL,
+  end_time DATETIME(6) NOT NULL,
+  capacity INT NOT NULL,
+  reserved INT NOT NULL DEFAULT 0,
+  status VARCHAR(20) NOT NULL DEFAULT 'OPEN', -- OPEN/CLOSED/CANCELED
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
+  CHECK (status IN ('OPEN','CLOSED','CANCELED')),
+  CHECK (reserved >= 0 AND reserved <= capacity),
+  UNIQUE KEY uk_slot_unique (exhibition_id, start_time, end_time),
+  INDEX idx_slot_time (start_time, end_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 예매/티켓/결제
+CREATE TABLE bookings (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  timeslot_id BIGINT NOT NULL,
+  qty INT NOT NULL CHECK (qty > 0),
+  amount DECIMAL(10,2) NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'PENDING', -- PENDING/CONFIRMED/CANCELED/REFUNDED
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (timeslot_id) REFERENCES timeslots(id),
+  CHECK (status IN ('PENDING','CONFIRMED','CANCELED','REFUNDED')),
+  INDEX idx_booking_user (user_id, status),
+  INDEX idx_booking_timeslot (timeslot_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE tickets (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  booking_id BIGINT NOT NULL,
+  code VARCHAR(40) NOT NULL,                 -- QR/바코드 값
+  status VARCHAR(20) NOT NULL DEFAULT 'ISSUED', -- ISSUED/USED/VOID
+  issued_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  used_at DATETIME(6) NULL,
+  FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
+  UNIQUE KEY uk_ticket_code (code),
+  INDEX idx_ticket_booking (booking_id, status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE payments (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  booking_id BIGINT NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  currency CHAR(3) NOT NULL DEFAULT 'KRW',
+  method VARCHAR(20) NOT NULL,               -- CARD/TRANSFER 등
+  status VARCHAR(20) NOT NULL DEFAULT 'PAID', -- PAID/PENDING/FAILED/REFUNDED
+  paid_at DATETIME(6) NULL,
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  FOREIGN KEY (booking_id) REFERENCES bookings(id),
+  CHECK (status IN ('PAID','PENDING','FAILED','REFUNDED')),
+  INDEX idx_payment_booking (booking_id, status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 리뷰(선택)
+CREATE TABLE reviews (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  exhibition_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  content TEXT NULL,
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  UNIQUE KEY uk_review_once (exhibition_id, user_id),
+  FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  INDEX idx_review_exhibition (exhibition_id, rating)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
