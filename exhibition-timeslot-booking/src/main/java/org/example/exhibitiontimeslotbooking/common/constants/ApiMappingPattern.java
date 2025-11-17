@@ -36,6 +36,34 @@ public class ApiMappingPattern {
         public static final String COLLECT = Users.BY_ID + GRANT + "/{roleName}";
     }
 
+    public static final class Venues {
+        private Venues() {}
 
+        public static final String ROOT = BASE + "/venues";
+        public static final String ID_ONLY = "/{venueId}";
+        public static final String BY_ID = ROOT + ID_ONLY;
+        public static final String COUNT = ROOT + "/count";
+        public static final String SEARCH = ROOT + "/search";
+        public static final String PAGE = ROOT + "/page";
+        public static final String LIKE = BY_ID + "/like";
+        public static final String LIKE_CANCEL = BY_ID + "/like/cancel";
+        public static final String LIKE_COUNT = BY_ID + "/like/count";
+    }
 
+    public static final class Exhibitions {
+        private Exhibitions() {}
+
+        public static final String ROOT = BASE + "/exhibitions";
+        public static final String ID_ONLY = "/{id}";
+        public static final String BY_ID = ROOT + ID_ONLY;
+        public static final String STATUS =  BY_ID + "/status";
+        public static final String SLOTS =  BY_ID + "/slots";
+    }
+
+    public static final class Timeslots {
+        public static final String ROOT =  BASE + "/slots";
+        public static final String ID_ONLY = "/{slotId}";
+        public static final String BY_ID = ROOT + ID_ONLY;
+        public static final String STATUS =  BY_ID + "/status";
+    }
 }
