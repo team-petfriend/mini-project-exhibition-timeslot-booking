@@ -35,8 +35,8 @@ CREATE TABLE user_roles (
   user_id BIGINT NOT NULL,
   role_name VARCHAR(30) NOT NULL,
   PRIMARY KEY(user_id, role_name),
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (role_name) REFERENCES roles(role_name)
+  CONSTRAINT fk_user_role_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_user_role_role_name FOREIGN KEY (role_name) REFERENCES roles(role_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 전시장/전시
@@ -60,7 +60,7 @@ CREATE TABLE exhibitions (
   capacity_policy VARCHAR(20) NOT NULL DEFAULT 'PER_SLOT', -- PER_DAY, PER_SLOT
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  FOREIGN KEY (venue_id) REFERENCES venues(id),
+  CONSTRAINT fk_exhibition_venues_id FOREIGN KEY (venue_id) REFERENCES venues(id),
   CHECK (status IN ('SCHEDULED','OPEN','CLOSED','CANCELED')),
   CHECK (capacity_policy IN ('PER_DAY','PER_SLOT')),
   INDEX idx_exhibitions_venue (venue_id, status)
@@ -77,7 +77,7 @@ CREATE TABLE timeslots (
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN', -- OPEN/CLOSED/CANCELED
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
+  CONSTRAINT fk_timeslots_exhibition_id FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
   CHECK (status IN ('OPEN','CLOSED','CANCELED')),
   CHECK (reserved >= 0 AND reserved <= capacity),
   UNIQUE KEY uk_slot_unique (exhibition_id, start_time, end_time),
@@ -94,8 +94,8 @@ CREATE TABLE bookings (
   status VARCHAR(20) NOT NULL DEFAULT 'PENDING', -- PENDING/CONFIRMED/CANCELED/REFUNDED
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (timeslot_id) REFERENCES timeslots(id),
+  CONSTRAINT fk_booking_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_booking_timeslot_id FOREIGN KEY (timeslot_id) REFERENCES timeslots(id),
   CHECK (status IN ('PENDING','CONFIRMED','CANCELED','REFUNDED')),
   INDEX idx_booking_user (user_id, status),
   INDEX idx_booking_timeslot (timeslot_id)
@@ -108,7 +108,7 @@ CREATE TABLE tickets (
   status VARCHAR(20) NOT NULL DEFAULT 'ISSUED', -- ISSUED/USED/VOID
   issued_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   used_at DATETIME(6) NULL,
-  FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
+  CONSTRAINT fk_ticket_booking_id FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
   UNIQUE KEY uk_ticket_code (code),
   INDEX idx_ticket_booking (booking_id, status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -123,7 +123,7 @@ CREATE TABLE payments (
   paid_at DATETIME(6) NULL,
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  FOREIGN KEY (booking_id) REFERENCES bookings(id),
+  CONSTRAINT fk_payment_booking_id FOREIGN KEY (booking_id) REFERENCES bookings(id),
   CHECK (status IN ('PAID','PENDING','FAILED','REFUNDED')),
   INDEX idx_payment_booking (booking_id, status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -137,7 +137,7 @@ CREATE TABLE reviews (
   content TEXT NULL,
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   UNIQUE KEY uk_review_once (exhibition_id, user_id),
-  FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
-  FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_review_exhibition_id FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
+  CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES users(id),
   INDEX idx_review_exhibition (exhibition_id, rating)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
