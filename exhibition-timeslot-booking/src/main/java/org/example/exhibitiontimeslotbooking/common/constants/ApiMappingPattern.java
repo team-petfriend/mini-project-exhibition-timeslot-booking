@@ -84,8 +84,9 @@ public class ApiMappingPattern {
         public static final String TICKETS = Bookings.BY_ID + "/tickets";
         public static final String ROOT = BASE + "/tickets";
         public static final String ID_ONLY = "/{ticketId}";
-        public static final String TICKET_USE = BASE + ID_ONLY + "/use";
-        public static final String TICKET_VOID = BASE + ID_ONLY + "/void";
+        public static final String BY_ID = BASE+ID_ONLY;
+        public static final String TICKET_USE = BY_ID + "/use";
+        public static final String TICKET_VOID = BY_ID + "/void";
         public static final String TICKET_SCAN = BASE + "/scan";
     }
 
@@ -94,8 +95,8 @@ public class ApiMappingPattern {
 
         public static final String ROOT = BASE+"/payments";
         public static final String ID_ONLY = "/{paymentId}";
-        public static final String DETAIL_PAY = ROOT  + ID_ONLY;
-        public static final String REFUND_PAY  = DETAIL_PAY+"/refund";
+        public static final String BY_ID = ROOT + ID_ONLY;
+        public static final String REFUND_PAY  = BY_ID + "/refund";
         public static final String WEBHOOK_PAY = ROOT + "/webhook";
     }
 
