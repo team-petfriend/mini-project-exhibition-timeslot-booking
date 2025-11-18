@@ -1,6 +1,4 @@
 import type { ApiResponse } from "@/types/common/ApiResponse";
-import { API_ROUTES } from "./common/apiMappingPattern";
-import { publicApi } from "./common/axiosInstance";
 import type { UserDetail } from "@/types/user.type";
 
 export async function fetchUserById(userId: number): Promise<UserDetail> {
