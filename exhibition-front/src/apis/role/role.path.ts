@@ -7,6 +7,6 @@ const ROLE_DETAIL = `${USER_PATH.BY_ID}`;
 export const ROLE_PATH = {
   ROOT: ROLE_PREFIX,
 
-  DETAIL: `${ROLE_DETAIL}/roles`,
-  DETAIL_BY_ID: ( roleName: String ) => `${ROLE_DETAIL}/roles/${roleName}`,
+  ADD: `${ROLE_DETAIL}/roles`,
+  BY_NAME: ( roleName: String ) => `${ROLE_DETAIL}/roles/${roleName}`,
 }

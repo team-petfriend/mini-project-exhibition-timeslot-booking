@@ -1,7 +1,7 @@
-import type { LoginRequest, LoginResponse, LogoutRequest, LogoutResponse, RefreshRequest, RefreshResponse, SignupRequest, SignupResponse } from "@/types/auth.type";
 import { publicApi } from "../common/axiosInstance";
 import type { ApiResponse } from "@/types/common/ApiResponse";
 import { AUTH_PATH } from "./auth.path";
+import type { LoginRequest, LoginResponse, LogoutRequest, LogoutResponse, RefreshRequest, RefreshResponse, SignupRequest, SignupResponse } from "@/types/auth/auth.dto";
 
 export const authApi = {
   signup: async (req: SignupRequest): Promise<SignupResponse> => {

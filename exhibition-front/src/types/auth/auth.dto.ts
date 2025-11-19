@@ -1,5 +1,3 @@
-// auth.type.ts
-
 export interface SignupRequest{}
 
 export interface SignupResponse{}
