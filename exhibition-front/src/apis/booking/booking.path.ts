@@ -2,6 +2,7 @@ import { BASE } from "../common/base.path";
 
 const BOOKING_PREFIX = `${BASE}/bookings`;
 const BOOKING_BY_ID = (bookingId: number) => `${BOOKING_PREFIX}/${bookingId}`;
+
 export const BOOKING_PATH = {
   ROOT: BOOKING_PREFIX,
   LIST: BOOKING_PREFIX,
