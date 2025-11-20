@@ -1,9 +1,9 @@
 import { BASE } from "../common/base.path";
 
-const VENUES_PREFIX = `${BASE}/venues`;
+const VENUES_EXHIBITIONS_TIMESLOT_PREFIX = `${BASE}/venues`;
 
 export const VENUES_EXHIBITIONS_PREFIX = (venueId: number, exhibitionId: number) => `
-  ${VENUES_PREFIX}/${venueId}/exhibitions/${exhibitionId}
+  ${VENUES_EXHIBITIONS_TIMESLOT_PREFIX}/${venueId}/exhibitions/${exhibitionId}
 `;
 
 export const VENUES_EXHIBITIONS_TIMESLOTS_PATH = {

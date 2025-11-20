@@ -44,6 +44,8 @@ public class ApiMappingPattern {
         public static final String ID_ONLY = "/{venueId}";
         public static final String BY_ID = ROOT + ID_ONLY;
 
+        public static final String VENUE_FILE = BY_ID + "/file";
+        public static final String VENUE_FILE_ID = VENUE_FILE + "/{fileId}";
         public static final String COUNT = ROOT + "/count";
         public static final String SEARCH = ROOT + "/search";
         public static final String PAGE = ROOT + "/page";
@@ -54,6 +56,9 @@ public class ApiMappingPattern {
         public static final String ROOT = Venues.BY_ID + "/exhibitions";
         public static final String ID_ONLY = "/{exhibitionId}";
         public static final String BY_ID = ROOT + ID_ONLY;
+
+        public static final String EXHIBITION_FILE = BY_ID + "/files";
+        public static final String EXHIBITION_FILE_ID = EXHIBITION_FILE + "/{fileId}";
 
         public static final String SEARCH = ROOT + "/search";
         public static final String PAGE = ROOT + "/page";
