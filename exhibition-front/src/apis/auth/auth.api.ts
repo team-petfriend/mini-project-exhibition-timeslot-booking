@@ -1,37 +1,53 @@
 import { publicApi } from "../common/axiosInstance";
-import type { ApiResponse } from "@/types/common/ApiResponse";
 import { AUTH_PATH } from "./auth.path";
 import type { LoginRequest, LoginResponse, LogoutRequest, LogoutResponse, RefreshRequest, RefreshResponse, SignupRequest, SignupResponse } from "@/types/auth/auth.dto";
+import type { ResponseDto } from "@/types/common/ResponseDto";
 
 export const authApi = {
   signup: async (req: SignupRequest): Promise<SignupResponse> => {
-    const res = await publicApi.post<ApiResponse<SignupResponse>>(
+    const res = await publicApi.post<ResponseDto<SignupResponse>>(
       AUTH_PATH.SIGNUP,
       req
     )
-    return res.data.data;
+    if (res.data.data) {
+      return res.data.data;
+    } else {
+      throw new Error("회원가입하기 위한 데이터가 올바르지 않습니다.");
+    }
   },
   login: async (req: LoginRequest): Promise<LoginResponse> => {
-    const res = await publicApi.post<ApiResponse<LoginResponse>>(
+    const res = await publicApi.post<ResponseDto<LoginResponse>>(
       AUTH_PATH.LOGIN,
       req
     );
-    return res.data.data;
+    if (res.data.data) {
+      return res.data.data;
+    } else {
+      throw new Error("로그인하기 위한 데이터가 올바르지 않습니다.");
+    }
   },
 
   refresh: async (req: RefreshRequest): Promise<RefreshResponse> => {
-    const res = await publicApi.post<ApiResponse<RefreshResponse>>(
+    const res = await publicApi.post<ResponseDto<RefreshResponse>>(
       AUTH_PATH.REFRESH,
       req
     )
-    return res.data.data
+    if (res.data.data) {
+      return res.data.data;
+    } else {
+      throw new Error("토큰 회수하기 위한 데이터가 올바르지 않습니다.");
+    }
   },
 
   logout: async (req: LogoutRequest): Promise<LogoutResponse> => {
-    const res = await publicApi.post<ApiResponse<LogoutResponse>>(
+    const res = await publicApi.post<ResponseDto<LogoutResponse>>(
       AUTH_PATH.LOGOUT,
       req
     );
-    return res.data.data;
+    if (res.data.data) {
+      return res.data.data;
+    } else {
+      throw new Error("로그아웃하기 위한 데이터가 올바르지 않습니다.");
+    }
   },
 };

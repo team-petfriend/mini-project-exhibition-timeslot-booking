@@ -8,5 +8,6 @@ export const USER_PATH = {
   LIST: USER_PREFIX,
 
   ME: `${USER_PREFIX}/me`,
+  PROFILE: `${USER_PREFIX}/me/profile`,
   BY_ID: ( userId: number ) => `${USER_PREFIX}/${userId}`,
 }
