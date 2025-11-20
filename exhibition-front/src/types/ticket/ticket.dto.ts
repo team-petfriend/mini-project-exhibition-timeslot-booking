@@ -7,4 +7,4 @@ export interface TicketUseReqDto {}
 
 export interface TicketVoidReqDto {}
 
-export interface TicketScanReqDto {}
+export interface TicketScanResDto {}
