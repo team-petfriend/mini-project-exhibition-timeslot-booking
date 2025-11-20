@@ -1,7 +1,7 @@
 import {
   type BookingCancelReqDto,
   type BookingCancelResDto,
-  type BookingListResDto,
+  type BookingDetailResDto,
   type BookingListResponse,
   type BookingRefundReqDto,
   type BookingRefundResDto,
@@ -9,11 +9,15 @@ import {
 import { privateApi, publicApi } from "../common/axiosInstance";
 import { BOOKING_PATH } from "./booking.path";
 import type { ResponseDto } from "@/types/common/ResponseDto";
+import type { BookingCreateForm } from "@/types/booking/booking.type";
 
 export const bookingApi = {
-  createBooking: async (): Promise<BookingListResponse> => {
-    const res = await privateApi.post<ResponseDto<BookingListResponse>>(
-      BOOKING_PATH.ROOT
+  createBooking: async (
+    req: BookingCreateForm
+  ): Promise<BookingListResponse> => {
+    const res = await privateApi.post<ResponseDto<void>>(
+      BOOKING_PATH.ROOT,
+      req
     );
     if (res.data.data) {
       return res.data.data;
@@ -22,7 +26,7 @@ export const bookingApi = {
     }
   },
 
-  getBooking: async (): Promise<BookingListResponse> => {
+  getAllBooking: async (): Promise<BookingListResponse> => {
     const res = await publicApi.get<ResponseDto<BookingListResponse>>(
       BOOKING_PATH.LIST
     );
@@ -33,8 +37,8 @@ export const bookingApi = {
     }
   },
 
-  getDetailBooking: async (bookingId: number): Promise<BookingListResDto> => {
-    const res = await privateApi.get<ResponseDto<BookingListResDto>>(
+  getBookingById: async (bookingId: number): Promise<BookingDetailResDto> => {
+    const res = await privateApi.get<ResponseDto<BookingDetailResDto>>(
       BOOKING_PATH.BY_ID(bookingId)
     );
     if (res.data.data) {
@@ -45,7 +49,7 @@ export const bookingApi = {
   },
 
   cancelBooking: async (bookingId: number): Promise<BookingCancelResDto> => {
-    const res = await privateApi.patch<ResponseDto<BookingCancelReqDto>>(
+    const res = await privateApi.put<ResponseDto<BookingCancelReqDto>>(
       BOOKING_PATH.BOOKING_CANCEL,
       bookingId
     );
@@ -56,10 +60,12 @@ export const bookingApi = {
     }
   },
 
-  refundBooking: async (bookingId: number): Promise<BookingRefundResDto> => {
-    const res = await privateApi.patch<ResponseDto<BookingRefundReqDto>>(
+  refundBooking: async (
+    req: BookingRefundReqDto
+  ): Promise<BookingRefundResDto> => {
+    const res = await privateApi.put<ResponseDto<BookingRefundResDto>>(
       BOOKING_PATH.BOOKING_REFUND,
-      bookingId
+      req
     );
     if (res.data.data) {
       return res.data.data;

@@ -4,6 +4,8 @@ export interface BookingCreateReqDto {}
 
 export interface BookingDetailResDto {}
 
+export interface BookingDetailReqDto {}
+
 export interface BookingCancelReqDto {}
 
 export interface BookingCancelResDto {}
