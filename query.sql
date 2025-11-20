@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS `mini-exhibition-db`;
+# DROP DATABASE IF EXISTS `mini-exhibition-db`;
 CREATE DATABASE IF NOT EXISTS `mini-exhibition-db`
   CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `mini-exhibition-db`;
@@ -13,6 +13,20 @@ DROP TABLE IF EXISTS venues;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS file_infos;
+
+
+CREATE TABLE file_infos (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    
+    original_name VARCHAR(255) NOT NULL,
+    stored_name VARCHAR(255) NOT NULL,
+    content_type VARCHAR(255),
+    file_size BIGINT,
+    file_path VARCHAR(255) NOT NULL,
+    
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+) ENGINE=InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- 공통(유저/권한)
 CREATE TABLE users (
@@ -21,10 +35,12 @@ CREATE TABLE users (
   login_id VARCHAR(50) NOT NULL,
   password VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
+  profile_file_id BIGINT NULL,
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   UNIQUE KEY uk_login (login_id),
-  UNIQUE KEY uk_email (email)
+  UNIQUE KEY uk_email (email),
+  CONSTRAINT fk_users_profile_file FOREIGN KEY (profile_file_id) REFERENCES file_infos(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE roles (
@@ -135,9 +151,11 @@ CREATE TABLE reviews (
   user_id BIGINT NOT NULL,
   rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
   content TEXT NULL,
+  review_file_id BIGINT NULL COMMENT '리뷰 이미지 파일 ID',
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   UNIQUE KEY uk_review_once (exhibition_id, user_id),
   CONSTRAINT fk_review_exhibition_id FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
   CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_reveiw_review_file_id FOREIGN KEY (review_file_id) REFERENCES file_infos(id) ON DELETE SET NULL,
   INDEX idx_review_exhibition (exhibition_id, rating)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
