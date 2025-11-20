@@ -1,5 +1,5 @@
 import { BASE } from "../common/base.path";
-import { BOOKING_PATH } from "./booking.path";
+import { BOOKING_PATH } from "../booking/booking.path";
 
 const TICKET_PREFIX = `${BASE}/tickets`;
 const TICKET_BY_ID = (ticketId: number) => `${TICKET_PREFIX}/${ticketId}`;
