@@ -6,4 +6,6 @@ export interface UserListItemResponse {}
 
 export interface UserMeResponse {}
 
+export interface MyProfileResponse {}
+
 export type UserListResponse = UserListItemResponse[];
