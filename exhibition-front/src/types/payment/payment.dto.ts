@@ -4,6 +4,7 @@ export interface PaymentListResDto {}
 export type PaymentListResponse = PaymentListResDto[];
 
 export interface PaymentDetailResDto {}
+export interface PaymentDetailReqDto {}
 
 export interface PaymentApproveUserReqDto {}
 
