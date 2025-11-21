@@ -1,6 +1,5 @@
 package org.example.exhibitiontimeslotbooking.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.exhibitiontimeslotbooking.base.BaseTimeEntity;
