@@ -1,9 +1,18 @@
-export interface SignupRequest{}
+export interface SignupRequest{
+  name: string;
+  loginId: string;
+  password: string;
+  email: string;
+}
 
-export interface SignupResponse{}
+export interface SignupResponse{
+  name: string;
+  loginId: string;
+  email: string;
+}
 
 export interface LoginRequest {
-  username: string;
+  loginId: string;
   pasword: string;
 }
 
@@ -12,11 +21,10 @@ export interface LoginResponse {
   expireTime: number;
 }
 
-export interface RefreshRequest {}
+export interface RefreshRequest {
+  refreshToken: string;
+}
 
-export interface RefreshResponse {}
-
-export interface LogoutRequest {}
-
-export interface LogoutResponse {}
-
+export interface LogoutRequest {
+  refreshToken: string;
+}

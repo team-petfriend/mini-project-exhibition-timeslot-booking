@@ -2,6 +2,8 @@ package org.example.exhibitiontimeslotbooking.dto.auth.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
+import org.example.exhibitiontimeslotbooking.entity.user.User;
 
 public record SignupRequestDto(
         @NotBlank(message = "이름은 필수값입니다.")
@@ -18,6 +20,14 @@ public record SignupRequestDto(
 
         @NotBlank(message = "이메일은 필수값입니다.")
         String email
-
 ) {
+        public User toEntity(FileInfo profileFile) {
+                return User.builder()
+                        .name(name)
+                        .loginId(loginId)
+                        .password(password)
+                        .email(email)
+                        .profileFile(profileFile)
+                        .build();
+        }
 }
