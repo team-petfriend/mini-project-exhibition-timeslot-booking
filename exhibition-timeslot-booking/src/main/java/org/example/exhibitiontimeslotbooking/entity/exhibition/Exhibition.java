@@ -57,7 +57,7 @@ public class Exhibition extends BaseTimeEntity {
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = false)
     @JoinColumn(name = "exhibition_id", foreignKey = @ForeignKey(name = "fk_exhibition_timeslot"))
-    private Set<Timeslot> timeslots;
+    private Set<Timeslot> timeslots = new HashSet<>();
 
     @OneToMany(mappedBy = "exhibition")
     private Set<ExhibitionFile> exhibitionFiles = new HashSet<>();
@@ -83,10 +83,6 @@ public class Exhibition extends BaseTimeEntity {
         this.startDate = startDate;
         this.endDate = endDate;
         this.capacityPolicy = capacityPolicy;
-    }
-
-    public void addSetTimeSlot (Timeslot timeslots) {
-        timeslots.add
     }
 
     public void changedStatus (STATUS newStatus) {

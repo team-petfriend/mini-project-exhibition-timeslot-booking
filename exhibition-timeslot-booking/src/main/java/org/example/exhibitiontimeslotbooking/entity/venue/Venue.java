@@ -36,7 +36,7 @@ public class Venue extends BaseTimeEntity {
     @Column(precision = 12, scale = 8)
     private BigDecimal longitude;
 
-    @OneToMany(mappedBy = "venue_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL)
     private Set<Exhibition> exhibitions = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, optional = true)
@@ -44,12 +44,12 @@ public class Venue extends BaseTimeEntity {
     private FileInfo fileInfo;
 
     @Builder
-    private Venue(String name, String address, BigDecimal latitude, BigDecimal longitude, FileInfo file) {
+    private Venue(String name, String address, BigDecimal latitude, BigDecimal longitude, FileInfo fileInfo) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.fileInfo = file;
+        this.fileInfo = fileInfo;
         this.exhibitions = new HashSet<>();
     }
 
