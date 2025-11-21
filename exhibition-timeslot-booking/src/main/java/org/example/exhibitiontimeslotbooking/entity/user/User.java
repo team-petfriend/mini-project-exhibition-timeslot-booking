@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
+import org.example.exhibitiontimeslotbooking.entity.review.Review;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,6 +47,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Review> reviews = new HashSet<>();
 
     @Builder
     private User(String name, String loginId, String password, String email, FileInfo profileFile) {

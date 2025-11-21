@@ -2,9 +2,12 @@ package org.example.exhibitiontimeslotbooking.entity.file;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.exhibitiontimeslotbooking.entity.review.Review;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "file_infos")
@@ -31,4 +34,10 @@ public class FileInfo {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @OneToOne(mappedBy = "reviewFile", fetch = FetchType.LAZY)
+    private Review review;
+
+    @OneToMany(mappedBy = "fileInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ReviewFile> reviewFiles = new HashSet<>();
 }
