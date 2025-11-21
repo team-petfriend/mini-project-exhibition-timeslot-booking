@@ -44,13 +44,17 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE roles (
-  role_name VARCHAR(30) PRIMARY KEY
+  role_name VARCHAR(30) PRIMARY KEY,
+  CONSTRAINT `chk_roles_role_name` CHECK(role_name IN ('ROLE_USER', 'ROLE_ADMIN', 'ROLE_STAFF'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE user_roles (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT NOT NULL,
   role_name VARCHAR(30) NOT NULL,
-  PRIMARY KEY(user_id, role_name),
+  UNIQUE KEY uk_user_roles_user_id_role_name (user_id, role_name),
+  INDEX idx_user_roles_user_id (user_id),
+  INDEX idx_user_roles_role_name (role_name),
   CONSTRAINT fk_user_role_user_id FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT fk_user_role_role_name FOREIGN KEY (role_name) REFERENCES roles(role_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
