@@ -1,3 +1,7 @@
+export type STATUS = "SCHEDULED" | "OPEN" | "CLOSED" | "CANCELED";
+
+export type CAPACITYPOLICY = "PER_DAY" | "PER_SLOT";
+
 // 전시회 전체 조회
 export interface ExhibitionsListDto {
   venueId: number;
@@ -6,8 +10,8 @@ export interface ExhibitionsListDto {
   description : string;
   startDate: string;
   endDate: string;
-  status: string;
-  capacityPolicy : string;
+  status: STATUS;
+  capacityPolicy : CAPACITYPOLICY;
   imgUrl:  string;
 }
 
@@ -22,8 +26,8 @@ export interface ExhibitionsDetailResponse {
   description : string;
   startDate: string;
   endDate : string;
-  status: string;
-  capacityPolicy : string;
+  status: STATUS;
+  capacityPolicy : CAPACITYPOLICY;
   created_at : string;
   updated_at : string;
   imgUrl:  string;
@@ -36,8 +40,8 @@ export interface ExhibitionsCreateRequest {
   description : string;
   startDate: string;
   endDate : string;
-  status?: string;
-  capacityPolicy?: string;
+  status?: STATUS;
+  capacityPolicy?: CAPACITYPOLICY;
 }
 
 // 전시회 수정 
@@ -48,14 +52,14 @@ export interface ExhibitionsUpdateRequest {
 	description?: string;
 	startDate?: string;
   endDate?:string;
-  capacityPolicy?: string;
+  capacityPolicy?: CAPACITYPOLICY;
 }
 
 // 전시회 상태 변경 
 export interface ExhibitionsStatusUpdateRequest {
   venueId: number;
   exhibitionId: number;
-	status: string;
+	status: STATUS;
 }
 
 // 전시회 이미지 파일 생성
