@@ -30,7 +30,7 @@ export interface ExhibitionsDetailResponse {
 }
 
 // 전시회 생성
-export interface exhibitionsCreateRequest {
+export interface ExhibitionsCreateRequest {
   venueId: number;
   title: string;
   description : string;
@@ -41,7 +41,7 @@ export interface exhibitionsCreateRequest {
 }
 
 // 전시회 수정 
-export interface exhibitionsUpdateRequest {
+export interface ExhibitionsUpdateRequest {
   venueId: number
   exhibitionId: number;
 	title?: string;
@@ -52,19 +52,19 @@ export interface exhibitionsUpdateRequest {
 }
 
 // 전시회 상태 변경 
-export interface exhibitionsStatusUpdateRequest {
+export interface ExhibitionsStatusUpdateRequest {
   venueId: number;
   exhibitionId: number;
 	status: string;
 }
 
 // 전시회 이미지 파일 생성
-export interface exhibitionsFileCreateRequest {
+export interface ExhibitionsFileCreateRequest {
   files: File[];
 }
 
 // 전시회 이미지 파일 수정 
-export interface exhibitionsFileUpdateRequest {
+export interface ExhibitionsFileUpdateRequest {
   venueId: number;
   exhibitionId: number;
   fileId: number;
