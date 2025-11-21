@@ -9,6 +9,7 @@ import org.example.exhibitiontimeslotbooking.common.enums.bookings.BookingStatus
 import org.example.exhibitiontimeslotbooking.entity.payment.Payment;
 import org.example.exhibitiontimeslotbooking.entity.ticket.Ticket;
 import org.example.exhibitiontimeslotbooking.entity.base.BaseTimeEntity;
+import org.example.exhibitiontimeslotbooking.entity.timeslot.Timeslot;
 import org.example.exhibitiontimeslotbooking.entity.user.User;
 import org.hibernate.annotations.Check;
 
