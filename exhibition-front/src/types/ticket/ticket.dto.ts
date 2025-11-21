@@ -1,10 +1,12 @@
 // ticket.dto.ts
-export interface TicketListResDto {}
+export interface TicketResDto {}
 
-export type TicketListResponse = TicketListResDto[];
+export type TicketListResponse = TicketResDto[];
 
 export interface TicketUseReqDto {}
 
-export interface TicketVoidReqDto {}
+export interface TicketUseResDto {}
+
+export interface TicketVoidResDto {}
 
 export interface TicketScanResDto {}

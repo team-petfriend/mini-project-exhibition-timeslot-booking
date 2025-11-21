@@ -1,5 +1,4 @@
 import {
-  type BookingCancelReqDto,
   type BookingCancelResDto,
   type BookingDetailResDto,
   type BookingListResponse,
@@ -49,28 +48,27 @@ export const bookingApi = {
   },
 
   cancelBooking: async (bookingId: number): Promise<BookingCancelResDto> => {
-    const res = await privateApi.put<ResponseDto<BookingCancelReqDto>>(
-      BOOKING_PATH.BOOKING_CANCEL,
-      bookingId
-    );
-    if (res.data.data) {
-      return res.data.data;
-    } else {
-      throw new Error("해당id의 얘매를 찾을 수 없습니다. 취소 실패");
-    }
-  },
+  const res = await privateApi.put<ResponseDto<BookingCancelResDto>>(
+    BOOKING_PATH.BOOKING_CANCEL(bookingId),
+    {}
+  );
+  if (res.data.data) {
+    return res.data.data;
+  } else {
+    throw new Error("해당id의 예매를 찾을 수 없습니다. 취소 실패");
+  }
+},
 
-  refundBooking: async (
-    req: BookingRefundReqDto
-  ): Promise<BookingRefundResDto> => {
-    const res = await privateApi.put<ResponseDto<BookingRefundResDto>>(
-      BOOKING_PATH.BOOKING_REFUND,
-      req
-    );
-    if (res.data.data) {
-      return res.data.data;
-    } else {
-      throw new Error("해당 id의 얘매를 찾을 수 없습니다.: 환불 실패");
-    }
-  },
+
+refundBooking: async (bookingId: number, req: BookingRefundReqDto): Promise<BookingRefundResDto> => {
+  const res = await privateApi.put<ResponseDto<BookingRefundResDto>>(
+    BOOKING_PATH.BOOKING_REFUND(bookingId),
+    req
+  );
+  if (res.data.data) {
+    return res.data.data;
+  } else {
+    throw new Error("해당 id의 예매를 찾을 수 없습니다.: 환불 실패");
+  }
+},
 };
