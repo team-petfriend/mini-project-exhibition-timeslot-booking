@@ -1,7 +1,10 @@
 package org.example.exhibitiontimeslotbooking.entity.review;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.exhibitiontimeslotbooking.entity.exhibition.Exhibition;
@@ -10,6 +13,8 @@ import org.example.exhibitiontimeslotbooking.entity.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(
@@ -29,6 +34,7 @@ public class Review {
     private Long id;
 
     @Column(name = "rating", nullable = false)
+    @Min(1) @Max(5)
     private Integer rating;
 
     @Column(name = "content", updatable = false)
@@ -42,11 +48,29 @@ public class Review {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_review_user_id"))
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "review_file_id", foreignKey = @ForeignKey(name = "fk_review_review_file_id"))
     private FileInfo reviewFile;
 
     @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME(6)")
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Review> reviews = new HashSet<>();
+
+    @Builder
+    public Review(User user, Exhibition exhibition, Integer rating, String content, FileInfo reviewFile) {
+        this.exhibition = exhibition;
+        this.user = user;
+        this.rating = rating;
+        this.content = content;
+        this.reviewFile = reviewFile;
+    }
+
+    public void validateRating() {
+        if (rating < 1 || rating > 5) {
+//            throw new Exception("Rating은 1에서 5사이여야 합니다.");
+        }
+    }
 }

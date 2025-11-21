@@ -176,3 +176,14 @@ CREATE TABLE reviews (
   CONSTRAINT fk_review_review_file_id FOREIGN KEY (review_file_id) REFERENCES file_infos(id) ON DELETE SET NULL,
   INDEX idx_review_exhibition (exhibition_id, rating)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE review_files (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    
+    review_id BIGINT NOT NULL,
+    file_id BIGINT NOT NULL,
+    display_order INT DEFAULT 0,
+    
+    CONSTRAINT fk_review_files_reviews FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE,
+    CONSTRAINT fk_review_files_file_info FOREIGN KEY (file_id) REFERENCES file_infos(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
