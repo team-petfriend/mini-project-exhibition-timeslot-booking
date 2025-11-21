@@ -4,9 +4,7 @@ import type {
   LoginRequest,
   LoginResponse,
   LogoutRequest,
-  LogoutResponse,
   RefreshRequest,
-  RefreshResponse,
   SignupRequest,
   SignupResponse,
 } from "@/types/auth/auth.dto";
@@ -36,11 +34,8 @@ export const authApi = {
     }
   },
 
-  refresh: async (req: RefreshRequest): Promise<RefreshResponse> => {
-    const res = await publicApi.post<ResponseDto<RefreshResponse>>(
-      AUTH_PATH.REFRESH,
-      req
-    );
+  refresh: async (req: RefreshRequest): Promise<void> => {
+    const res = await publicApi.post<ResponseDto<void>>(AUTH_PATH.REFRESH, req);
     if (res.data.data) {
       return res.data.data;
     } else {
@@ -48,11 +43,8 @@ export const authApi = {
     }
   },
 
-  logout: async (req: LogoutRequest): Promise<LogoutResponse> => {
-    const res = await publicApi.post<ResponseDto<LogoutResponse>>(
-      AUTH_PATH.LOGOUT,
-      req
-    );
+  logout: async (req: LogoutRequest): Promise<void> => {
+    const res = await publicApi.post<ResponseDto<void>>(AUTH_PATH.LOGOUT, req);
     if (res.data.data) {
       return res.data.data;
     } else {

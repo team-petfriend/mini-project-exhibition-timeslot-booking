@@ -59,6 +59,19 @@ CREATE TABLE user_roles (
   CONSTRAINT fk_user_role_role_name FOREIGN KEY (role_name) REFERENCES roles(role_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE refresh_tokens (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL UNIQUE,
+    token VARCHAR(350) NOT NULL,
+    expiry DATETIME(6) NOT NULL,
+    
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    
+    INDEX `idx_refresh_token_user_id` (user_id),
+    CONSTRAINT `fk_refresh_token_user` FOREIGN KEY (user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
 -- 전시장/전시
 CREATE TABLE venues (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -155,11 +168,11 @@ CREATE TABLE reviews (
   user_id BIGINT NOT NULL,
   rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
   content TEXT NULL,
-  review_file_id BIGINT NULL COMMENT '리뷰 이미지 파일 ID',
+  review_file_id BIGINT NULL,
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   UNIQUE KEY uk_review_once (exhibition_id, user_id),
   CONSTRAINT fk_review_exhibition_id FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
   CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT fk_reveiw_review_file_id FOREIGN KEY (review_file_id) REFERENCES file_infos(id) ON DELETE SET NULL,
+  CONSTRAINT fk_review_review_file_id FOREIGN KEY (review_file_id) REFERENCES file_infos(id) ON DELETE SET NULL,
   INDEX idx_review_exhibition (exhibition_id, rating)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
