@@ -3,7 +3,7 @@ package org.example.exhibitiontimeslotbooking.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.exhibitiontimeslotbooking.base.BaseTimeEntity;
+import org.example.exhibitiontimeslotbooking.entity.base.BaseTimeEntity;
 
 import java.math.BigDecimal;
 
