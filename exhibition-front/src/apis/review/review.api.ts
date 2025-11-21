@@ -11,7 +11,7 @@ export const reviewApi = {
     if (res.data.data) {
       return res.data.data;
     } else {
-      throw new Error("리뷰 목록을 불러올 수 없습니다.");
+      throw new Error("리뷰 목록 응답 데이터가 올바르지 않습니다.");
     }
   },
   createReview: async () : Promise<ReveiwCreateResponse> => {
