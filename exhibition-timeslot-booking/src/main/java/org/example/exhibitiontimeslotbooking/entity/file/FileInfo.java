@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "file_infos")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
