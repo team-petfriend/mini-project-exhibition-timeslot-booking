@@ -1,6 +1,6 @@
 package org.example.exhibitiontimeslotbooking.common.enums.exhibitions;
 
-public enum CAPACITYPOLICY {
+public enum CapacityPolicy {
     PER_DAY,
     PER_SLOT
 }

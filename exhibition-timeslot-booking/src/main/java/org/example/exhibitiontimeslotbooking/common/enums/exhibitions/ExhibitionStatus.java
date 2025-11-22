@@ -1,6 +1,6 @@
 package org.example.exhibitiontimeslotbooking.common.enums.exhibitions;
 
-public enum STATUS {
+public enum ExhibitionStatus {
     SCHEDULED,
     OPEN,
     CLOSED,

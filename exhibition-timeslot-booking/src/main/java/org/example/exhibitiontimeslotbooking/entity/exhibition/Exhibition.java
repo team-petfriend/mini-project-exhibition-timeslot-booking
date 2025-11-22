@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.CAPACITYPOLICY;
-import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.STATUS;
+import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.CapacityPolicy;
+import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.ExhibitionStatus;
 import org.example.exhibitiontimeslotbooking.entity.file.ExhibitionFile;
 import org.example.exhibitiontimeslotbooking.entity.timeslot.Timeslot;
 import org.example.exhibitiontimeslotbooking.entity.base.BaseTimeEntity;
@@ -46,38 +46,37 @@ public class Exhibition extends BaseTimeEntity {
     private LocalDateTime endDate;
 
     @Column(nullable = false)
-    private STATUS status = STATUS.SCHEDULED;
+    private ExhibitionStatus exhibitionStatus = ExhibitionStatus.SCHEDULED;
 
     @Column(nullable = false)
-    private CAPACITYPOLICY capacityPolicy = CAPACITYPOLICY.PER_DAY;
+    private CapacityPolicy capacityPolicy = CapacityPolicy.PER_DAY;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "venue_id", foreignKey = @ForeignKey(name = "fk_exhibition_venue"))
     private Venue venue;
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = false)
-    @JoinColumn(name = "exhibition_id", foreignKey = @ForeignKey(name = "fk_exhibition_timeslot"))
+    @OneToMany(mappedBy = "exhibition")
     private Set<Timeslot> timeslots = new HashSet<>();
 
     @OneToMany(mappedBy = "exhibition")
     private Set<ExhibitionFile> exhibitionFiles = new HashSet<>();
 
     @Builder
-    public  Exhibition(
-            String title, String description, LocalDateTime startDate, LocalDateTime endDate, STATUS status, CAPACITYPOLICY capacityPolicy, Venue venue
+    public Exhibition(
+            String title, String description, LocalDateTime startDate, LocalDateTime endDate, ExhibitionStatus exhibitionStatus, CapacityPolicy capacityPolicy, Venue venue
     ) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.status = (status != null) ? status : STATUS.SCHEDULED;
-        this.capacityPolicy = (capacityPolicy != null) ? capacityPolicy : CAPACITYPOLICY.PER_DAY ;
+        this.exhibitionStatus = (exhibitionStatus != null) ? exhibitionStatus : ExhibitionStatus.SCHEDULED;
+        this.capacityPolicy = (capacityPolicy != null) ? capacityPolicy : CapacityPolicy.PER_DAY ;
         this.venue = venue;
         this.exhibitionFiles = new HashSet<>();
         this.timeslots = new HashSet<>();
     }
 
-    public void updated (String title, String description, LocalDateTime startDate, LocalDateTime endDate, CAPACITYPOLICY capacityPolicy) {
+    public void updated (String title, String description, LocalDateTime startDate, LocalDateTime endDate, CapacityPolicy capacityPolicy) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
@@ -85,8 +84,8 @@ public class Exhibition extends BaseTimeEntity {
         this.capacityPolicy = capacityPolicy;
     }
 
-    public void changedStatus (STATUS newStatus) {
-        this.status = newStatus;
+    public void changedStatus (ExhibitionStatus newExhibitionStatus) {
+        this.exhibitionStatus = newExhibitionStatus;
     }
 
 }

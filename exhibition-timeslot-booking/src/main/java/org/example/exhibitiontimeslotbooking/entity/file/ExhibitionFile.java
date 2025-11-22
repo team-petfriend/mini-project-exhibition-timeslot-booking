@@ -19,8 +19,8 @@ public class ExhibitionFile {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "venue_id", nullable = false, foreignKey = @ForeignKey(name = "fk_exhibition_files_exhibition"))
-    private Venue venue;
+    @JoinColumn(name = "exhibition_id", nullable = false, foreignKey = @ForeignKey(name = "fk_exhibition_files_exhibition"))
+    private Exhibition exhibition;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "file_id", nullable = false, foreignKey = @ForeignKey(name = "fk_exhibition_files_file_info"))
@@ -33,8 +33,8 @@ public class ExhibitionFile {
     }
 
     @Builder
-    public ExhibitionFile (Venue venue, FileInfo fileInfo, Integer displayOrder){
-        this.venue = venue;
+    public ExhibitionFile (Exhibition exhibition, FileInfo fileInfo, Integer displayOrder){
+        this.exhibition = exhibition;
         this.fileInfo = fileInfo;
         this.displayOrder = displayOrder;
     }

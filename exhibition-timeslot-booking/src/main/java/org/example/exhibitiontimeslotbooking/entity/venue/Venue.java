@@ -53,11 +53,11 @@ public class Venue extends BaseTimeEntity {
         this.exhibitions = new HashSet<>();
     }
 
-    private void changedFile(FileInfo newFile) {
+    public void changedFile(FileInfo newFile) {
         this.fileInfo = newFile;
     }
 
-    private void changedVenue(String name, String address, BigDecimal latitude, BigDecimal longitude) {
+    public void changedVenue(String name, String address, BigDecimal latitude, BigDecimal longitude) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;
