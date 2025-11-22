@@ -2,12 +2,11 @@ package org.example.exhibitiontimeslotbooking.entity.timeslot;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.exhibitiontimeslotbooking.common.enums.slots.SLOTSSTATUS;
+import org.example.exhibitiontimeslotbooking.common.enums.slots.SlotStatus;
 import org.example.exhibitiontimeslotbooking.entity.base.BaseTimeEntity;
 import org.example.exhibitiontimeslotbooking.entity.exhibition.Exhibition;
 
@@ -40,19 +39,19 @@ public class Timeslot extends BaseTimeEntity {
     private int reserved = 0;
 
     @Column(nullable = false)
-    private SLOTSSTATUS slotsStatus = SLOTSSTATUS.OPEN;
+    private SlotStatus slotsStatus = SlotStatus.OPEN;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "exhibition_id", nullable = false, foreignKey = @ForeignKey(name = "fk_timeslot_exhibition"))
     private Exhibition exhibition;
 
     @Builder
-    public Timeslot(LocalDateTime startTime, LocalDateTime endTime, int capacity, int reserved, SLOTSSTATUS slotsStatus, Exhibition exhibition) {
+    public Timeslot(LocalDateTime startTime, LocalDateTime endTime, int capacity, int reserved, SlotStatus slotsStatus, Exhibition exhibition) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.capacity = capacity;
         this.reserved = reserved;
-        this.slotsStatus = (slotsStatus != null) ? slotsStatus : SLOTSSTATUS.OPEN;
+        this.slotsStatus = (slotsStatus != null) ? slotsStatus : SlotStatus.OPEN;
         this.exhibition = exhibition;
     }
 
@@ -71,7 +70,7 @@ public class Timeslot extends BaseTimeEntity {
         return  this.reserved + count <= this.capacity;
     }
 
-    public void checkStatus (SLOTSSTATUS newStatus) {
+    public void checkStatus (SlotStatus newStatus) {
         this.slotsStatus = newStatus;
     }
 
