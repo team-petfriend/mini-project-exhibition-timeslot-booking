@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 )
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,12 +41,14 @@ public class Ticket {
     @CreationTimestamp
     private LocalDateTime usedAt;
 
-    public static Ticket of(Booking bookingId, String code, TicketStatus ticketStatus){
-        return Ticket.builder()
-                .bookingId(bookingId)
-                .code(code)
-                .ticketStatus(ticketStatus)
-                .build();
+    @Builder
+    public  Ticket(Long id, Booking bookingId, String code, TicketStatus ticketStatus,  LocalDateTime issuedAt, LocalDateTime usedAt) {
+        this.id = id;
+        this.bookingId = bookingId;
+        this.code = code;
+        this.ticketStatus = (ticketStatus!=null) ? ticketStatus : TicketStatus.ISSUED;
+        this.issuedAt = issuedAt;
+        this.usedAt = usedAt;
     }
 
 
