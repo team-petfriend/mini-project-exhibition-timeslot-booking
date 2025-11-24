@@ -1,4 +1,4 @@
-package org.example.exhibitiontimeslotbooking.service.impl.file;
+package org.example.exhibitiontimeslotbooking.service.file;
 
 import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
@@ -73,7 +73,6 @@ public class FileServiceImpl {
             throw new FileStorageException(ErrorCode.INTERNAL_ERROR, "", e);
         }
     }
-
 
     @Transactional
     public void deleteFile(FileInfo info) {
