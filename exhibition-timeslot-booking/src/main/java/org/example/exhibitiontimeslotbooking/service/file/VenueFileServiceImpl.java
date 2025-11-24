@@ -1,4 +1,4 @@
-package org.example.exhibitiontimeslotbooking.service.impl.file;
+package org.example.exhibitiontimeslotbooking.service.file;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
