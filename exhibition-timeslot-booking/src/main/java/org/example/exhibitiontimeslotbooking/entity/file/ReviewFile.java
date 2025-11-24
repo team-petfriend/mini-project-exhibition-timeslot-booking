@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.exhibitiontimeslotbooking.entity.review.Review;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "review_files")
 @Getter
@@ -17,7 +20,7 @@ public class ReviewFile {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "review_id", nullable = false, foreignKey = @ForeignKey(name = "fk_review_files_reviews"))
     private Review review;
 
