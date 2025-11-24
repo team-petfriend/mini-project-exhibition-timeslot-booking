@@ -5,9 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record TimeslotCreateRequestDto(
-        @NotNull (message = "exhibition_Id는 필수입니다.")
-        Long exhibitionId,
-
         @NotNull(message = "시작시간은 필수입니다.")
         LocalDateTime startTime,
 

@@ -7,9 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record ExhibitionsCreateRequestDto(
-        @NotNull (message = "venue_Id는 필수입니다.")
-        Long venueId,
-
         @NotBlank(message = "제목은 비워둘수 없습니다.")
         String title,
 

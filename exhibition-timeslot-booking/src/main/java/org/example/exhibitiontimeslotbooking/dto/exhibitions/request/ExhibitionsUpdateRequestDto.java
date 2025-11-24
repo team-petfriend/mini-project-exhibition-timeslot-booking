@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 
 public record ExhibitionsUpdateRequestDto(
-
         String title,
 
         String description,
