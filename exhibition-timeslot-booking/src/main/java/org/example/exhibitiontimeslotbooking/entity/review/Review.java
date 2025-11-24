@@ -56,9 +56,6 @@ public class Review {
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME(6)")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Review> reviews = new HashSet<>();
-
     @Builder
     public Review(User user, Exhibition exhibition, Integer rating, String content, FileInfo reviewFile) {
         this.exhibition = exhibition;
