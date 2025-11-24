@@ -2,9 +2,10 @@ package org.example.exhibitiontimeslotbooking.dto.exhibitions.response;
 
 import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.CapacityPolicy;
 import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.ExhibitionStatus;
-import org.example.exhibitiontimeslotbooking.dto.exbitions_file.response.ExhibitionFileDto;
+import org.example.exhibitiontimeslotbooking.dto.exbitions_file.response.ExhibitionFileResponseDto;
 import org.example.exhibitiontimeslotbooking.entity.exhibition.Exhibition;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,11 +14,11 @@ public record ExhibitionSummaryDto(
         Long id,
         String title,
         String description,
-        LocalDateTime startDate,
-        LocalDateTime endDate,
+        LocalDate startDate,
+        LocalDate endDate,
         ExhibitionStatus status,
         CapacityPolicy capacityPolicy,
-        List<ExhibitionFileDto> exhibitionsFiles,
+        List<ExhibitionFileResponseDto> exhibitionsFiles,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -33,7 +34,7 @@ public record ExhibitionSummaryDto(
                 exhibition.getEndDate(),
                 exhibition.getExhibitionStatus(),
                 exhibition.getCapacityPolicy(),
-                exhibition.getExhibitionFiles().stream().map(fileInfo -> ExhibitionFileDto.from(fileInfo.getFileInfo())).collect(Collectors.toList()),
+                exhibition.getExhibitionFiles().stream().map(fileInfo -> ExhibitionFileResponseDto.from(fileInfo.getFileInfo())).collect(Collectors.toList()),
                 exhibition.getCreatedAt(),
                 exhibition.getUpdatedAt()
         );

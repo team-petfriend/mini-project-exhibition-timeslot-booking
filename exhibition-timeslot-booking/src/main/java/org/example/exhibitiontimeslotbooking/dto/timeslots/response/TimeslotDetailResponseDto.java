@@ -5,25 +5,29 @@ import org.example.exhibitiontimeslotbooking.entity.timeslot.Timeslot;
 
 import java.time.LocalDateTime;
 
-public record TimeslotDetailResponse(
+public record TimeslotDetailResponseDto(
         Long exhibitionId,
         LocalDateTime startTime,
         LocalDateTime endTime,
         int capacity,
         int reserved,
-        SlotStatus timeslotstatus
+        SlotStatus timeslotstatus,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
-    public static TimeslotDetailResponse from(Timeslot timeslot) {
+    public static TimeslotDetailResponseDto from(Timeslot timeslot) {
 
         if (timeslot == null) return null;
 
-        return new TimeslotDetailResponse(
+        return new TimeslotDetailResponseDto(
                 timeslot.getExhibition().getId(),
                 timeslot.getStartTime(),
                 timeslot.getEndTime(),
                 timeslot.getCapacity(),
                 timeslot.getReserved(),
-                timeslot.getSlotsStatus()
+                timeslot.getSlotsStatus(),
+                timeslot.getCreatedAt(),
+                timeslot.getUpdatedAt()
         );
     }
 }

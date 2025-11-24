@@ -6,7 +6,7 @@ public record VenueSummaryDto(
         Long id,
         String name,
         String address,
-        VenueFileResponse venueMainImg
+        VenueFileResponseDto venueMainImg
 ) {
     public static VenueSummaryDto from(Venue venue) {
         if (venue == null) return null;
@@ -15,7 +15,7 @@ public record VenueSummaryDto(
                 venue.getId(),
                 venue.getName(),
                 venue.getAddress(),
-                VenueFileResponse.from(venue.getFileInfo())
+                VenueFileResponseDto.from(venue.getFileInfo())
         );
     }
 }

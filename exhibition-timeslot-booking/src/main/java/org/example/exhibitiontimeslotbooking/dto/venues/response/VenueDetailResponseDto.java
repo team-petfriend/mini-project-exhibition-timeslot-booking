@@ -3,26 +3,30 @@ package org.example.exhibitiontimeslotbooking.dto.venues.response;
 import org.example.exhibitiontimeslotbooking.entity.venue.Venue;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-public record VenueDetailResponse(
+public record VenueDetailResponseDto(
         Long id,
         String name,
         String address,
-        VenueFileResponse venueMainImg,
+        VenueFileResponseDto venueMainImg,
         BigDecimal latitude,
-        BigDecimal longitude
+        BigDecimal longitude,
+        LocalDateTime created_at
+
 ) {
-    public static VenueDetailResponse from(Venue venue) {
+    public static VenueDetailResponseDto from(Venue venue) {
 
         if (venue == null) return null;
 
-        return new VenueDetailResponse(
+        return new VenueDetailResponseDto(
                 venue.getId(),
                 venue.getName(),
                 venue.getAddress(),
-                VenueFileResponse.from(venue.getFileInfo()),
+                VenueFileResponseDto.from(venue.getFileInfo()),
                 venue.getLatitude(),
-                venue.getLongitude()
+                venue.getLongitude(),
+                venue.getCreatedAt()
         );
     }
 }
