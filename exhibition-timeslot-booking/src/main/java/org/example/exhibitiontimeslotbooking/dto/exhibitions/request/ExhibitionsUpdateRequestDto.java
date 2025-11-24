@@ -1,20 +1,19 @@
 package org.example.exhibitiontimeslotbooking.dto.exhibitions.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.CapacityPolicy;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-public record ExhibitionsUpdateRequest(
+
+public record ExhibitionsUpdateRequestDto(
 
         String title,
 
         String description,
 
-        LocalDateTime startDate,
+        LocalDate startDate,
 
-        LocalDateTime endDate,
+        LocalDate endDate,
 
         CapacityPolicy capacityPolicy
 ) {

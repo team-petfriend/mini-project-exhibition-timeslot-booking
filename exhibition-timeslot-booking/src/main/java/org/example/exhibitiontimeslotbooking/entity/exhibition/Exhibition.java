@@ -13,6 +13,7 @@ import org.example.exhibitiontimeslotbooking.entity.timeslot.Timeslot;
 import org.example.exhibitiontimeslotbooking.entity.base.BaseTimeEntity;
 import org.example.exhibitiontimeslotbooking.entity.venue.Venue;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,14 +41,16 @@ public class Exhibition extends BaseTimeEntity {
     private String description;
 
     @Column(nullable = false)
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ExhibitionStatus exhibitionStatus = ExhibitionStatus.SCHEDULED;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CapacityPolicy capacityPolicy = CapacityPolicy.PER_DAY;
 
@@ -63,7 +66,7 @@ public class Exhibition extends BaseTimeEntity {
 
     @Builder
     public Exhibition(
-            String title, String description, LocalDateTime startDate, LocalDateTime endDate, ExhibitionStatus exhibitionStatus, CapacityPolicy capacityPolicy, Venue venue
+            String title, String description, LocalDate startDate, LocalDate endDate, ExhibitionStatus exhibitionStatus, CapacityPolicy capacityPolicy, Venue venue
     ) {
         this.title = title;
         this.description = description;
@@ -76,7 +79,7 @@ public class Exhibition extends BaseTimeEntity {
         this.timeslots = new HashSet<>();
     }
 
-    public void updated (String title, String description, LocalDateTime startDate, LocalDateTime endDate, CapacityPolicy capacityPolicy) {
+    public void updated (String title, String description, LocalDate startDate, LocalDate endDate, CapacityPolicy capacityPolicy) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;

@@ -38,6 +38,7 @@ public class Timeslot extends BaseTimeEntity {
     @Column(nullable = false)
     private int reserved = 0;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SlotStatus slotsStatus = SlotStatus.OPEN;
 

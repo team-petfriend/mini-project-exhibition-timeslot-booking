@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
-public record VenuesUpdateRequest(
+public record VenuesCreateRequestDto(
 
         @NotBlank(message = "전시장 이름은 필수입니다.")
         @Size(max = 100, message = "이름은 100자를 넘길 수 없습니다.")
@@ -16,6 +16,6 @@ public record VenuesUpdateRequest(
         BigDecimal latitude,
 
         BigDecimal longitude
-        
 ) {
+
 }
