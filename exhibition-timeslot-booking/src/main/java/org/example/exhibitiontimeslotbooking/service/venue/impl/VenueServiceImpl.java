@@ -1,22 +1,19 @@
 package org.example.exhibitiontimeslotbooking.service.venue.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesCreateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.response.VenueDetailResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.response.VenueSummaryDto;
-import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
 import org.example.exhibitiontimeslotbooking.entity.venue.Venue;
-import org.example.exhibitiontimeslotbooking.repository.file.FileInfoRepository;
+import org.example.exhibitiontimeslotbooking.exception.BusinessException;
 import org.example.exhibitiontimeslotbooking.repository.venue.VenueRepository;
 import org.example.exhibitiontimeslotbooking.service.venue.VenueService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -30,7 +27,6 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional
     public ResponseDto<VenueDetailResponseDto> createVenue(VenuesCreateRequestDto request) {
-
         Venue venue = Venue.builder()
                         .name(request.name())
                         .address(request.address())
@@ -42,7 +38,7 @@ public class VenueServiceImpl implements VenueService {
 
         VenueDetailResponseDto data = VenueDetailResponseDto.from(saved);
 
-        return ResponseDto.setSuccess("SUCCESS", data);
+        return ResponseDto.success("전시장이 생성되었습니다.", data);
     }
 
     // 전체 조회
@@ -55,26 +51,53 @@ public class VenueServiceImpl implements VenueService {
                 .map(VenueSummaryDto::from)
                 .toList();
 
-        return ResponseDto.setSuccess("전체조회에 성공하였습니다.", data);
+        return ResponseDto.success("전시장 전체조회 되었습니다.", data);
     }
 
     // 조회
     @Override
     public ResponseDto<VenueDetailResponseDto> getByIdVenue(Long venueId) {
-        if (venueId == null) throw new CustomEx
 
-        return null;
+        Venue venue = venueRepository.findById(venueId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
+
+        VenueDetailResponseDto data = VenueDetailResponseDto.from(venue);
+
+        return ResponseDto.success("전시장 조회 되었습니다.", data);
     }
 
     // 수정
     @Override
+    @Transactional
     public ResponseDto<VenueDetailResponseDto> updateVenue(Long venueId, VenuesUpdateRequestDto request) {
-        return null;
+
+        Venue venue = venueRepository.findById(venueId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
+
+        venue.changedVenue(
+                request.name(),
+                request.address(),
+                request.latitude(),
+                request.latitude()
+        );
+
+        venueRepository.flush();
+
+        VenueDetailResponseDto data = VenueDetailResponseDto.from(venue);
+
+        return ResponseDto.success("전시장이 수정되었습니다.", data);
     }
 
     // 삭제
     @Override
+    @Transactional
     public ResponseDto<Void> deleteVenue(Long venueId) {
-        return null;
+
+        Venue venue = venueRepository.findById(venueId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
+
+        venueRepository.delete(venue);
+
+        return ResponseDto.success("전시장이 삭제되었습니다.", null);
     }
 }
