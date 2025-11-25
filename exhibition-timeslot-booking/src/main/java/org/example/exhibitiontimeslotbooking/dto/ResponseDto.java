@@ -3,7 +3,7 @@ package org.example.exhibitiontimeslotbooking.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
-import org.example.boardback.common.enums.ErrorCode;
+import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
 
 import java.time.Instant;
 
