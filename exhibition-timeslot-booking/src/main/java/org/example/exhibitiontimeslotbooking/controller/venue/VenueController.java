@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.attribute.UserPrincipal;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -27,9 +28,9 @@ public class VenueController {
 
     // 생성
     @PostMapping
-    public ResponseEntity<ResponseDto<VenueDetailResponseDto>> createVenue(UserPrincipal userPrincipal, @Valid @RequestBody VenuesCreateRequestDto request)
+    public ResponseEntity<ResponseDto<VenueDetailResponseDto>> createVenue(@Valid @RequestBody VenuesCreateRequestDto request)
     {
-        ResponseDto<VenueDetailResponseDto> data = venueService.createVenue(userPrincipal, request);
+        ResponseDto<VenueDetailResponseDto> data = venueService.createVenue(request);
 
         return ResponseEntity.ok(data);
     }
@@ -44,8 +45,8 @@ public class VenueController {
 
     // 단건조회
     @GetMapping(ApiMappingPattern.Venues.ID_ONLY)
-    public ResponseEntity<ResponseDto<VenueDetailResponseDto>> getByIdVenue(UserPrincipal userPrincipal, @PathVariable Long venueId) {
-        ResponseDto<VenueDetailResponseDto> data = venueService.getByIdVenue(userPrincipal, venueId);
+    public ResponseEntity<ResponseDto<VenueDetailResponseDto>> getByIdVenue(@PathVariable Long venueId) {
+        ResponseDto<VenueDetailResponseDto> data = venueService.getByIdVenue(venueId);
 
         return ResponseEntity.ok(data);
     }
@@ -53,19 +54,18 @@ public class VenueController {
     // 수정
     @PutMapping(ApiMappingPattern.Venues.ID_ONLY)
     public ResponseEntity<ResponseDto<VenueDetailResponseDto>> updateVenue(
-            UserPrincipal userPrincipal,
             @PathVariable Long venueId,
             @RequestBody VenuesUpdateRequestDto request
             ) {
-        ResponseDto<VenueDetailResponseDto> data = venueService.updateVenue(userPrincipal, venueId, request);
+        ResponseDto<VenueDetailResponseDto> data = venueService.updateVenue(venueId, request);
 
         return ResponseEntity.ok(data);
     }
 
     // 삭제
     @GetMapping(ApiMappingPattern.Venues.ID_ONLY)
-    public ResponseEntity<ResponseDto<Void>> deleteVenue(UserPrincipal userPrincipal, @PathVariable Long venueId ) {
-        ResponseDto<Void> data = venueService.deleteVenue(userPrincipal, venueId);
+    public ResponseEntity<ResponseDto<Void>> deleteVenue(@PathVariable Long venueId ) {
+        ResponseDto<Void> data = venueService.deleteVenue(venueId);
 
         return ResponseEntity.ok(data);
     }
