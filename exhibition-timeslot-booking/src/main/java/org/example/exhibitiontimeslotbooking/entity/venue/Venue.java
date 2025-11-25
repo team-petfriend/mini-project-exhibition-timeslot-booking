@@ -44,14 +44,13 @@ public class Venue extends BaseTimeEntity {
     private FileInfo fileInfo;
 
     @Builder
-    private Venue(String name, String address, BigDecimal latitude, BigDecimal longitude, FileInfo fileInfo) {
+    private Venue(String name, String address, BigDecimal latitude, BigDecimal longitude) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.fileInfo = fileInfo;
-        this.exhibitions = new HashSet<>();
     }
+
 
     public void changedFile(FileInfo newFile) {
         this.fileInfo = newFile;
