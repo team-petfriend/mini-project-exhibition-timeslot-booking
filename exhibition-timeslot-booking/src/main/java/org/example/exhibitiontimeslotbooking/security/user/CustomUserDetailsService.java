@@ -28,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 🔥 실무 기준: username 기반 조회
         // 이메일 로그인 정책이면: userRepository.findByEmail(loginId)
-        User user = userRepository.findByUserLoginId(loginId)
+        User user = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
 
         // 🔥 엔티티 → UserPrincipal 변환
