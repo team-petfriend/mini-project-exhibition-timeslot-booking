@@ -50,7 +50,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String userId = principal.getLoginId();
 
-        User user = userRepository.findByUserLoginId(userId)
+        User user = userRepository.findByLoginId(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         Set<String> roles = principal.getAuthorities().stream()

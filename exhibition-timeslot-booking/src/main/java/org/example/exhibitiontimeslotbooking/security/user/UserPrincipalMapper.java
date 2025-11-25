@@ -16,7 +16,7 @@ public class UserPrincipalMapper {
 
     public UserPrincipal toPrincipal(@NonNull String loginId) {
 
-        User user = userRepository.findByUserLoginId(loginId)
+        User user = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new RuntimeException("User not found: " + loginId));
 
         return map(user);
