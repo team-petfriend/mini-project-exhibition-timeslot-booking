@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
+import org.example.exhibitiontimeslotbooking.dto.venues.response.VenueDetailResponseDto;
 
 import java.time.Instant;
 
