@@ -1,4 +1,4 @@
-package org.example.exhibitiontimeslotbooking.filter;
+package org.example.exhibitiontimeslotbooking.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,7 +18,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -32,11 +31,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain chain
     ) throws ServletException, IOException {
-        String token = resolveTocken(request);
+
+        String token = resolveToken(request);
+
         try {
-            if(token != null && jwtProvider.isValidToken(token)){
-                String loginId = jwtProvider.getUsernameFromJwt(token);
-                UserPrincipal principal = userPrincipalMapper.toPrincipal(loginId);
+            if (token != null && jwtProvider.isValidToken(token)) {
+
+                String username = jwtProvider.getUsernameFromJwt(token);
+                UserPrincipal principal = userPrincipalMapper.toPrincipal(username);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
@@ -50,15 +52,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.warn("[JwtAuthenticationFilter] 토큰 검증 실패: {}", ex.getMessage());
+            // Exception은 JsonAuthenticationEntryPoint 로 전달됨
         }
 
         chain.doFilter(request, response);
     }
 
+    /** Authorization Header → Bearer 토큰 추출 */
     private String resolveToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
 
