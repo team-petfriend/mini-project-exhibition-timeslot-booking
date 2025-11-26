@@ -63,12 +63,51 @@ public class User {
     private boolean emailVerified;
 
     @Builder
-    private User(String name, String loginId, String password, String email, FileInfo profileFile) {
+    private User(String name,
+                 String loginId,
+                 String password,
+                 String email,
+                 FileInfo profileFile,
+                 AuthProvider provider,
+                 String providerId,
+                 boolean emailVerified
+    ) {
         this.name = name;
         this.loginId = loginId;
         this.password = password;
         this.email = email;
         this.profileFile = profileFile;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.emailVerified = emailVerified;
+    }
+
+    // OAuth2용 생성/업데이트 메서드
+    public static User createOauthUser(
+            AuthProvider provider,
+            String providerId,
+            String name,
+            String email
+    ) {
+        return User.builder()
+                .name(name)
+                .loginId(provider.name() + "_" + providerId)
+                .password(null)
+                .email(email)
+                .provider(provider)
+                .providerId(providerId)
+                .emailVerified(true)
+                .build();
+    }
+
+    public void updateOauthProfile(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    // == 도메인 로직 == //
+    public void changePassword(String password) {
+        this.password = password;
     }
 
     public void updateProfile(String name) {
