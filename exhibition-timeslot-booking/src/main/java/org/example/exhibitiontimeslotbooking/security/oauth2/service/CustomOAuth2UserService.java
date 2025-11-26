@@ -53,7 +53,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = upsertUser(provider, userInfo);
 
         // 5. 프로젝트 서비스에서 사용하는 UserPrincipal로 래핑
-        return userPrincipalMapper.toPrincipal(user.getUsername());
+        return userPrincipalMapper.toPrincipal(user.getName());
     }
 
     private AuthProvider mapProvider(String registrationId) {

@@ -1,10 +1,11 @@
 package org.example.exhibitiontimeslotbooking.config;
 
 import lombok.RequiredArgsConstructor;
-
 import org.example.exhibitiontimeslotbooking.security.filter.JwtAuthenticationFilter;
 import org.example.exhibitiontimeslotbooking.security.handler.JsonAccessDeniedHandler;
 import org.example.exhibitiontimeslotbooking.security.handler.JsonAuthenticationEntryPoint;
+import org.example.exhibitiontimeslotbooking.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
+import org.example.exhibitiontimeslotbooking.security.oauth2.service.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
