@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.exhibitiontimeslotbooking.common.enums.AuthProvider;
 import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
 import org.example.exhibitiontimeslotbooking.entity.review.Review;
@@ -50,6 +51,16 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider", length = 20, nullable = false)
+    private AuthProvider provider;
+
+    @Column(name = "provider_id", length = 100)
+    private String providerId;
+
+    @Column(name = "email_verified", nullable = false)
+    private boolean emailVerified;
 
     @Builder
     private User(String name, String loginId, String password, String email, FileInfo profileFile) {
