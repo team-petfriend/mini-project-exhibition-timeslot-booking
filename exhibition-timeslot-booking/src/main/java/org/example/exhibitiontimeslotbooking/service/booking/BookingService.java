@@ -9,13 +9,14 @@ import org.example.exhibitiontimeslotbooking.dto.booking.response.BookingListRes
 import org.example.exhibitiontimeslotbooking.security.user.UserPrincipal;
 
 public interface BookingService {
-    ResponseDto<BookingDetailResponse> createBooking(@Valid BookingCreateRequest request);
 
-    ResponseDto<BookingListResponse> getAllBooking(UserPrincipal userPrincipal);
+    ResponseDto<BookingDetailResponse> createBooking(UserPrincipal principal, @Valid BookingCreateRequest request);
 
-    ResponseDto<BookingDetailResponse> getBookingById(Long bookingId);
+    ResponseDto<BookingListResponse> getAllBooking(UserPrincipal principal);
 
-    ResponseDto<BookingDetailResponse> cancelBooking(Long bookingId ,@Valid BookingUpdateRequest request);
+    ResponseDto<BookingDetailResponse> getBookingById(UserPrincipal principal, Long bookingId);
 
-    ResponseDto<BookingDetailResponse> refundBooking(Long bookingId, @Valid BookingUpdateRequest request);
+    ResponseDto<BookingDetailResponse> cancelBooking(UserPrincipal principal, Long bookingId);
+
+    ResponseDto<BookingDetailResponse> refundBooking(UserPrincipal principal, Long bookingId);
 }

@@ -32,11 +32,11 @@ public class Booking extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_booking_user_id"))
-    private User userId;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "timeslot_id", nullable = false, foreignKey = @ForeignKey(name = "fk_booking_timeslot_id"))
-    private Timeslot timeslotId;
+    private Timeslot timeslot;
 
     @Column(name = "qty", nullable = false)
     @Check(constraints = "qty > 0")
@@ -61,9 +61,9 @@ public class Booking extends BaseTimeEntity {
 
 
     @Builder
-    public Booking(@NotNull User userId, Timeslot timeslotId, int qty, int amount, BookingStatus status ){
-        this.userId = userId;
-        this.timeslotId = timeslotId;
+    public Booking(@NotNull User user, Timeslot timeslot, int qty, int amount, BookingStatus status ){
+        this.user = user;
+        this.timeslot = timeslot;
         this.qty = qty;
         this.amount = amount;
         this.status = (status != null) ? status : BookingStatus.PENDING;

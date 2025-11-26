@@ -5,23 +5,19 @@ import org.example.exhibitiontimeslotbooking.entity.booking.Booking;
 
 import java.time.LocalDateTime;
 
-public record BookingDetailResponse(
+public record BookingResponse(
         Long id,
         Long userId,
         Long timeslotId,
-        Integer qty,
         Integer amount,
         BookingStatus status,
         LocalDateTime createdAt
-
-
 ) {
-    public static BookingDetailResponse from(Booking booking){
-        return new BookingDetailResponse(
+    public static BookingResponse from(Booking booking){
+        return new BookingResponse(
                 booking.getId(),
                 booking.getUser().getId(),
                 booking.getTimeslot().getId(),
-                booking.getQty(),
                 booking.getAmount(),
                 booking.getStatus(),
                 booking.getCreatedAt()
