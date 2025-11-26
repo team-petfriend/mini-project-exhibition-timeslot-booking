@@ -50,6 +50,7 @@ public class Booking extends BaseTimeEntity {
     @Column(name = "status", nullable = false, length = 20)
     private BookingStatus status = BookingStatus.PENDING ;
 
+
     @OneToMany(mappedBy = "bookingId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Ticket> tickets = new HashSet<>();
 
