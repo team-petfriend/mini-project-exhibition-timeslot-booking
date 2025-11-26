@@ -10,8 +10,8 @@ import org.example.exhibitiontimeslotbooking.dto.booking.response.BookingDetailR
 import org.example.exhibitiontimeslotbooking.dto.booking.response.BookingListResponse;
 import org.example.exhibitiontimeslotbooking.security.user.UserPrincipal;
 import org.example.exhibitiontimeslotbooking.service.booking.BookingService;
-import org.example.exhibitiontimeslotbooking.service.booking.impl.BookingServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,47 +23,47 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<ResponseDto<BookingDetailResponse>> createBooking(
+            @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody BookingCreateRequest request
-    ){
-        ResponseDto<BookingDetailResponse> response = bookingService.createBooking(request);
+    ) {
+        ResponseDto<BookingDetailResponse> response = bookingService.createBooking(principal, request);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping
     public ResponseEntity<ResponseDto<BookingListResponse>> getAllBooking(
-            @AuthenticationPrincipal UserPrincipal userPrincipal
-            ){
-        ResponseDto<BookingListResponse> response = bookingService.getAllBooking(userPrincipal);
+            @AuthenticationPrincipal UserPrincipal principal
+    ) {
+        ResponseDto<BookingListResponse> response = bookingService.getAllBooking(principal);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping(ApiMappingPattern.Bookings.BY_ID)
     public ResponseEntity<ResponseDto<BookingDetailResponse>> getBookingById(
+            @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long bookingId
-    ){
-        ResponseDto<BookingDetailResponse> response = bookingService.getBookingById(bookingId);
+    ) {
+        ResponseDto<BookingDetailResponse> response = bookingService.getBookingById(principal, bookingId);
         return ResponseEntity.ok().body(response);
     }
 
     @PutMapping(ApiMappingPattern.Bookings.BOOKING_CANCEL)
     public ResponseEntity<ResponseDto<BookingDetailResponse>> cancelBooking(
-            @PathVariable Long bookingId,
-            @Valid @RequestBody BookingUpdateRequest request
-
-    ){
-        ResponseDto<BookingDetailResponse>response = bookingService.cancelBooking(bookingId, request);
+            @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable Long bookingId
+    ) {
+        ResponseDto<BookingDetailResponse> response = bookingService.cancelBooking(principal, bookingId);
         return ResponseEntity.ok().body(response);
     }
+
     @PutMapping(ApiMappingPattern.Bookings.BOOKING_REFUND)
     public ResponseEntity<ResponseDto<BookingDetailResponse>> refundBooking(
-            @PathVariable Long bookingId,
-            @Valid @RequestBody BookingUpdateRequest request
-    ){
-        ResponseDto<BookingDetailResponse>response = bookingService.refundBooking(bookingId, request);
+            @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable Long bookingId
+    ) {
+        ResponseDto<BookingDetailResponse> response = bookingService.refundBooking(principal, bookingId);
         return ResponseEntity.ok().body(response);
     }
-
-
 
 
 }
