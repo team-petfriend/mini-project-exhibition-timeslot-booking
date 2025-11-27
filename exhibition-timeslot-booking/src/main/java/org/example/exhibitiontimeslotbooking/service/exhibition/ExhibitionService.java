@@ -24,4 +24,6 @@ public interface ExhibitionService {
     ResponseDto<List<ExhibitionSummaryDto>> getAllExhibition(Long venueId);
 
     ResponseDto<Void> deleteExhibition(Long venueId, Long exhibitionId);
+
+    ResponseDto<ExhibitionDetailResponseDto> changeAutoStatusExhibition(Long venueId, Long exhibitionId);
 }
