@@ -47,7 +47,9 @@ public enum ErrorCode {
     EXHIBITION_NOT_FOUND(HttpStatus.NOT_FOUND, "B001", "전시회를 찾을 수 없습니다.", "Exhibition not fount"),
     EXHIBITION_CANCEL_ONLY_SCHEDULED(HttpStatus.BAD_REQUEST, "B002", "상태가 SCHEDULED인 상태만 취소할 수 있습니다.", "Exhibition BAD_REQUEST"),
     EXHIBITION_ALREADY_CANCELED(HttpStatus.CONFLICT, "B003", "이미 취소된 전시회입니다.", "Exhibition CONFLICT"),
-    EXHIBITION_STATUS_FINALIZED(HttpStatus.BAD_REQUEST, "B004", "이미 종료된 전시회입니다.", "Exhibition BAD_REQUEST");
+    EXHIBITION_STATUS_FINALIZED(HttpStatus.BAD_REQUEST, "B004", "이미 종료된 전시회입니다.", "Exhibition BAD_REQUEST"),
+    EXHIBITION_NOT_STARTED(HttpStatus.BAD_REQUEST, "B005", "시작전 입니다.", "Exhibition Not Open"),
+    EXHIBITION_IS_CLOSED(HttpStatus.BAD_REQUEST, "B006", "종료되었습니다.", "Exhibition Is Closed");
 
     private final HttpStatus status;
     private final String code;

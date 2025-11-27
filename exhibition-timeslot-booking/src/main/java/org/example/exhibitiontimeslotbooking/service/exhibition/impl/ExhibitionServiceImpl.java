@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -132,24 +133,19 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     @Transactional
     public ResponseDto<ExhibitionDetailResponseDto> changeStatusExhibition(Long venueId, Long exhibitionId, ExhibitionsStatusUpdateRequestDto request) {
 
-        LocalDateTime today = LocalDateTime.now();
-
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
 
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
 
-        if (exhibition.getExhibitionStatus() == ExhibitionStatus.CANCELED ) {
+        if (exhibition.getExhibitionStatus() == ExhibitionStatus.CANCELED) {
             throw new BusinessException(ErrorCode.EXHIBITION_ALREADY_CANCELED);
         }
 
         if (exhibition.getExhibitionStatus() == ExhibitionStatus.CLOSED) {
             throw new BusinessException(ErrorCode.EXHIBITION_STATUS_FINALIZED);
         }
-
-
-
 
         exhibition.changedStatus(
                 request.exhibitionStatus()
@@ -160,5 +156,44 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         exhibitionRepository.flush();
 
         return ResponseDto.success("전시회장 상태가 변경되었습니다.", data);
+    }
+
+    @Override
+    @Transactional
+    public ResponseDto<ExhibitionDetailResponseDto> changeAutoStatusExhibition(Long venueId, Long exhibitionId) {
+
+        Venue venue = venueRepository.findById(venueId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
+
+        Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
+
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = exhibition.getStartDate();
+        LocalDate endDate = exhibition.getEndDate();
+
+        if (exhibition.getExhibitionStatus() == ExhibitionStatus.CANCELED) {
+            throw new BusinessException(ErrorCode.EXHIBITION_ALREADY_CANCELED);
+        }
+
+        if (exhibition.getExhibitionStatus() == ExhibitionStatus.CLOSED) {
+            throw new BusinessException(ErrorCode.EXHIBITION_STATUS_FINALIZED);
+        }
+
+        if  (today.isBefore(startDate)) {
+            exhibition.changedStatus(ExhibitionStatus.SCHEDULED);
+        }
+
+        if (today.isAfter(endDate)) {
+            exhibition.changedStatus(ExhibitionStatus.CLOSED);
+        }
+
+        if (!today.isBefore(startDate) && !today.isAfter(endDate)) {
+            exhibition.changedStatus(ExhibitionStatus.OPEN);
+        }
+
+        ExhibitionDetailResponseDto data = ExhibitionDetailResponseDto.from(exhibition);
+
+        return ResponseDto.success("전시회가 자동 수정되었습니다.", data);
     }
 }
