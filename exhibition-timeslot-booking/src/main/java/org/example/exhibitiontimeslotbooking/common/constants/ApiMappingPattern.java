@@ -63,7 +63,7 @@ public class ApiMappingPattern {
 
         public static final String SEARCH = ROOT + "/search";
         public static final String PAGE = ROOT + "/page";
-        public static final String STATUS =  BY_ID + "/status";
+        public static final String STATUS = ID_ONLY + "/status";
     }
 
     public static final class Timeslots {

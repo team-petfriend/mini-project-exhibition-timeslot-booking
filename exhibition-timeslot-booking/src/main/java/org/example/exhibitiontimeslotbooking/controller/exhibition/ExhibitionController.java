@@ -45,7 +45,7 @@ public class ExhibitionController {
     }
 
     // 전시회 단건 조회
-    @GetMapping(ApiMappingPattern.Exhibitions.BY_ID)
+    @GetMapping(ApiMappingPattern.Exhibitions.ID_ONLY)
     public ResponseEntity<ResponseDto<ExhibitionDetailResponseDto>> getByIdExhibition (
             @PathVariable Long venueId,
             @PathVariable Long exhibitionId
@@ -56,7 +56,7 @@ public class ExhibitionController {
     }
 
     // 삭제
-    @DeleteMapping(ApiMappingPattern.Exhibitions.BY_ID)
+    @DeleteMapping(ApiMappingPattern.Exhibitions.ID_ONLY)
     public ResponseEntity<ResponseDto<Void>> deleteExhibition (
             @PathVariable Long venueId,
             @PathVariable Long exhibitionId
@@ -67,7 +67,7 @@ public class ExhibitionController {
     }
 
     // 전시회 수정
-    @PutMapping(ApiMappingPattern.Exhibitions.BY_ID)
+    @PutMapping(ApiMappingPattern.Exhibitions.ID_ONLY)
     public ResponseEntity<ResponseDto<ExhibitionDetailResponseDto>> updateExhibition (
             @PathVariable Long venueId,
             @PathVariable Long exhibitionId,
