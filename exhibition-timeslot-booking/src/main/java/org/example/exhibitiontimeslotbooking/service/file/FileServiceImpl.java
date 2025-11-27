@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -30,6 +31,13 @@ public class FileServiceImpl {
     private String venusPath;
 
     private FileInfoRepository fileInfoRepository;
+
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
+            "jpg", "jpeg", "png", "gif",
+            "pdf", "txt", "zip"
+    );
+
+    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024L;
 
     private void ensureDirectory(String path) {
         File dir = new File(path);
@@ -83,5 +91,9 @@ public class FileServiceImpl {
             throw new FileStorageException(ErrorCode.INTERNAL_ERROR, "", e);
         }
         fileInfoRepository.delete(info);
+    }
+
+    public FileInfo saveUserProfileImage(MultipartFile file) {
+        return null;
     }
 }

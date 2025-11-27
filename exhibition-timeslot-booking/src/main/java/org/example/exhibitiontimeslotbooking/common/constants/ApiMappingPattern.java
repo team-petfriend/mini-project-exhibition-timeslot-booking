@@ -28,6 +28,7 @@ public class ApiMappingPattern {
         public static final String BY_ID = ROOT + ID_ONLY;
         public static final String ME = ROOT + "/me";
         public static final String PROFILE = ME + "/profile";
+        public static final String PROFILE_IMAGE = PROFILE + "/image";
     }
 
     public static final class Roles {
