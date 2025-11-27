@@ -103,7 +103,6 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         return ResponseDto.success("전시회장이 삭제되었습니다.", null);
     }
 
-
     @Override
     @Transactional
     public ResponseDto<ExhibitionDetailResponseDto> updateExhibition(Long venueId, Long exhibitionId, ExhibitionsUpdateRequestDto request) {
