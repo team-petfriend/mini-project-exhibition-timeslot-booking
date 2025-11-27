@@ -44,7 +44,7 @@ public class VenueController {
     }
 
     // 단건조회
-    @GetMapping(ApiMappingPattern.Venues.ID_ONLY)
+    @GetMapping(ApiMappingPattern.Venues.BY_ID)
     public ResponseEntity<ResponseDto<VenueDetailResponseDto>> getByIdVenue(@PathVariable Long venueId) {
         ResponseDto<VenueDetailResponseDto> data = venueService.getByIdVenue(venueId);
 
@@ -52,7 +52,7 @@ public class VenueController {
     }
 
     // 수정
-    @PutMapping(ApiMappingPattern.Venues.ID_ONLY)
+    @PutMapping(ApiMappingPattern.Venues.BY_ID)
     public ResponseEntity<ResponseDto<VenueDetailResponseDto>> updateVenue(
             @PathVariable Long venueId,
             @RequestBody VenuesUpdateRequestDto request
@@ -63,7 +63,7 @@ public class VenueController {
     }
 
     // 삭제
-    @GetMapping(ApiMappingPattern.Venues.ID_ONLY)
+    @GetMapping(ApiMappingPattern.Venues.BY_ID)
     public ResponseEntity<ResponseDto<Void>> deleteVenue(@PathVariable Long venueId ) {
         ResponseDto<Void> data = venueService.deleteVenue(venueId);
 
