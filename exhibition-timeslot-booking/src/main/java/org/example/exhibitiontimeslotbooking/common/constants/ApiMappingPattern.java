@@ -71,7 +71,8 @@ public class ApiMappingPattern {
         public static final String ROOT =  Exhibitions.BY_ID + "/slots";
         public static final String ID_ONLY = "/{slotId}";
         public static final String BY_ID = ROOT + ID_ONLY;
-        public static final String STATUS =  BY_ID + "/status";
+        public static final String STATUS =  ID_ONLY + "/status";
+        public static final String AUTO_STATUS = ID_ONLY + "/auto-status";
     }
 
     public static final class Bookings {

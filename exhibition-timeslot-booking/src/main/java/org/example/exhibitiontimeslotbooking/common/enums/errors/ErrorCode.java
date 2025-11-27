@@ -45,11 +45,20 @@ public enum ErrorCode {
     // Exhibition (Bxxx)
     // ===========================
     EXHIBITION_NOT_FOUND(HttpStatus.NOT_FOUND, "B001", "전시회를 찾을 수 없습니다.", "Exhibition not fount"),
-    EXHIBITION_CANCEL_ONLY_SCHEDULED(HttpStatus.BAD_REQUEST, "B002", "상태가 SCHEDULED인 상태만 취소할 수 있습니다.", "Exhibition BAD_REQUEST"),
-    EXHIBITION_ALREADY_CANCELED(HttpStatus.CONFLICT, "B003", "이미 취소된 전시회입니다.", "Exhibition CONFLICT"),
-    EXHIBITION_STATUS_FINALIZED(HttpStatus.BAD_REQUEST, "B004", "이미 종료된 전시회입니다.", "Exhibition BAD_REQUEST"),
+    EXHIBITION_CANCEL_ONLY_SCHEDULED(HttpStatus.BAD_REQUEST, "B002", "상태가 SCHEDULED인 상태만 취소할 수 있습니다.", "Exhibition bad request"),
+    EXHIBITION_ALREADY_CANCELED(HttpStatus.CONFLICT, "B003", "이미 취소된 전시회입니다.", "Exhibition conflict"),
+    EXHIBITION_STATUS_FINALIZED(HttpStatus.BAD_REQUEST, "B004", "이미 종료된 전시회입니다.", "Exhibition bad request"),
     EXHIBITION_NOT_STARTED(HttpStatus.BAD_REQUEST, "B005", "시작전 입니다.", "Exhibition Not Open"),
-    EXHIBITION_IS_CLOSED(HttpStatus.BAD_REQUEST, "B006", "종료되었습니다.", "Exhibition Is Closed");
+    EXHIBITION_IS_CLOSED(HttpStatus.BAD_REQUEST, "B006", "종료되었습니다.", "Exhibition Is Closed"),
+
+    // ===========================
+    // Timeslot (Txxx)
+    // ===========================
+    TIMESLOT_NOT_FOUND(HttpStatus.NOT_FOUND, "T001", "타임슬롯을 찾을 수 없습니다.", "Timeslot not found"),
+    TIMESLOT_ALREADY_EXISTS(HttpStatus.CONFLICT, "T002", "타임슬롯이 이미 존재합니다.", "Duplicate timeslot"),
+    TIMESLOT_ALREADY_CANCELED(HttpStatus.CONFLICT, "T003", "이미 취소된 타임슬롯입니다.", "Timeslot is Canceled"),
+    TIMESLOT_OUT_OF_EXHIBITION_RANGE(HttpStatus.BAD_REQUEST, "T004", "타임슬롯 시간은 전시회 시작~종료 시간 안에 있어야 합니다.", "slot time exceeds limit");
+
 
     private final HttpStatus status;
     private final String code;

@@ -75,4 +75,10 @@ public class Timeslot extends BaseTimeEntity {
         this.slotsStatus = newStatus;
     }
 
+    public void updated(LocalDateTime startTime, LocalDateTime endTime, int capacity) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.capacity = capacity;
+    }
+
 }
