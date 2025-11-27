@@ -2,6 +2,7 @@ package org.example.exhibitiontimeslotbooking.service.booking.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.exhibitiontimeslotbooking.common.enums.bookings.BookingStatus;
 import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.booking.request.BookingCreateRequest;
@@ -54,6 +55,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     public ResponseDto<BookingListResponse> getAllBooking(UserPrincipal principal) {
         User user = userRepository.findByLoginId(principal.getLoginId())
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다ㅣ."));
@@ -66,17 +68,51 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     public ResponseDto<BookingDetailResponse> getBookingById(UserPrincipal principal, Long bookingId) {
-        return null;
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 id의 예약을 찾을 수 없습니다."));
+
+        if(!booking.getUser().getLoginId().equals(principal.getLoginId())){
+            throw new IllegalArgumentException("권한 없음");
+        }
+
+        BookingDetailResponse data = BookingDetailResponse.from(booking);
+        return ResponseDto.success("success", data);
+
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     public ResponseDto<BookingDetailResponse> cancelBooking(UserPrincipal principal, Long bookingId) {
-        return null;
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 id의 예약 정보를 찾을 수 없습니다."));
+
+        if(!booking.getUser().getLoginId().equals(principal.getLoginId())){
+            throw new IllegalArgumentException("권한없음");
+        }
+
+        booking.setBookingStatus(BookingStatus.CANCELED);
+        BookingDetailResponse data = BookingDetailResponse.from(booking);
+        return ResponseDto.success("SUCCESS", data);
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     public ResponseDto<BookingDetailResponse> refundBooking(UserPrincipal principal, Long bookingId) {
-        return null;
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 예약 정보를 찾을 수 없습니다."));
+
+        if (!booking.getUser().getLoginId().equals(principal.getLoginId())) {
+            throw new SecurityException("본인의 예약만 환불할 수 있습니다.");
+        }
+        if (booking.getStatus() != BookingStatus.CANCELED) {
+            throw new IllegalStateException("취소된 예약만 환불할 수 있습니다.");
+        }
+
+        booking.setBookingStatus(BookingStatus.REFUNDED);
+
+        BookingDetailResponse data = BookingDetailResponse.from(booking);
+        return ResponseDto.success("SUCCESS", data);
     }
 }
