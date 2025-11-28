@@ -23,9 +23,7 @@ public class ProfileServiceImpl {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-        // 기존 프로필 삭제
         if (user.getProfileFile() != null) {
-            // 기존 프로필이 있는 경우
             FileInfo current = fileInfoRepository.findById(user.getProfileFile().getId())
                     .orElse(null);
 
@@ -34,14 +32,11 @@ public class ProfileServiceImpl {
             }
         }
 
-        // 새 파일 저장
         FileInfo saved = fileService.saveUserProfileImage(file);
 
-        // User 테이블에 file_id 저장
         user.updateProfileImage(saved);
         userRepository.save(user);
 
         return ResponseDto.success(saved);
     }
-
 }

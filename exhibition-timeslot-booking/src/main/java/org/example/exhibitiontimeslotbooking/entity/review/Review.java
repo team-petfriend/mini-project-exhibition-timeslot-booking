@@ -9,11 +9,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.exhibitiontimeslotbooking.entity.exhibition.Exhibition;
 import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
+import org.example.exhibitiontimeslotbooking.entity.file.ReviewFile;
 import org.example.exhibitiontimeslotbooking.entity.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -52,6 +55,9 @@ public class Review {
     @JoinColumn(name = "review_file_id", foreignKey = @ForeignKey(name = "fk_review_review_file_id"))
     private FileInfo reviewFile;
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewFile> reviewFiles = new ArrayList<>();
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME(6)")
     private LocalDateTime createdAt;
@@ -62,12 +68,27 @@ public class Review {
         this.user = user;
         this.rating = rating;
         this.content = content;
-        this.reviewFile = reviewFile;
     }
 
     public void validateRating() {
         if (rating < 1 || rating > 5) {
-//            throw new Exception("Rating은 1에서 5사이여야 합니다.");
+            throw new RuntimeException("Rating은 1에서 5사이여야 합니다.");
         }
+    }
+
+    public void setRating(@Min(1) @Max(5) Integer rating) {
+        if (rating == null || rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("Rating은 1에서 5사이여야 합니다.");
+        }
+        this.rating = rating;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void addReviewFile(ReviewFile reviewFile) {
+        reviewFile.setReview(this);
+        reviewFiles.add(reviewFile);
     }
 }

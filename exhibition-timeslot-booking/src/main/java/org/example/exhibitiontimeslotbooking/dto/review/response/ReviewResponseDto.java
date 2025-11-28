@@ -13,14 +13,14 @@ public record ReviewResponseDto(
         Long reviewFileId,
         LocalDateTime createdAt
 ) {
-    public static ReviewResponseDto fromEntity(Review review) {
+    public static ReviewResponseDto from(Review review) {
         return new ReviewResponseDto(
                 review.getId(),
                 review.getExhibition().getId(),
                 review.getUser().getId(),
                 review.getRating(),
                 review.getContent(),
-                review.getReviewFile().getId(),
+                review.getReviewFile() != null ? review.getReviewFile().getId() : null,
                 review.getCreatedAt()
         );
     }
