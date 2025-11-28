@@ -40,4 +40,9 @@ public class FileInfo {
 
     @OneToMany(mappedBy = "fileInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ReviewFile> reviewFiles = new HashSet<>();
+
+    public void addReviewFile(ReviewFile reviewFile) {
+        reviewFiles.add(reviewFile);
+        reviewFile.setFileInfo(this);
+    }
 }

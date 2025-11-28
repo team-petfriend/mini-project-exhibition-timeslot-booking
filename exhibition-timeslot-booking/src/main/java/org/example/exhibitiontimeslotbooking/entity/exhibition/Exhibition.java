@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.CapacityPolicy;
 import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.ExhibitionStatus;
 import org.example.exhibitiontimeslotbooking.entity.file.ExhibitionFile;
+import org.example.exhibitiontimeslotbooking.entity.review.Review;
 import org.example.exhibitiontimeslotbooking.entity.timeslot.Timeslot;
 import org.example.exhibitiontimeslotbooking.entity.base.BaseTimeEntity;
 import org.example.exhibitiontimeslotbooking.entity.venue.Venue;
@@ -63,6 +64,9 @@ public class Exhibition extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "exhibition")
     private Set<ExhibitionFile> exhibitionFiles = new HashSet<>();
+
+    @OneToMany(mappedBy = "exhibition")
+    private Set<Review> reviews = new HashSet<>();
 
     @Builder
     public Exhibition(

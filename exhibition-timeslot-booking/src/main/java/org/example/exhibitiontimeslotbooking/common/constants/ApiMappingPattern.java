@@ -110,8 +110,8 @@ public class ApiMappingPattern {
     public static final class Reviews {
         private Reviews() {}
 
-        public static final String ROOT = Exhibitions.BY_ID + "/reviews";
-        public static final String FILES = ROOT + "/files";
+        public static final String ROOT = BASE + "/exhibitions/{exhibitionId}/reviews";
+        public static final String REVIEW_FILES = ROOT + "/files";
         public static final String BY_ID = "/reviews/{reviewId}";
 
     }
