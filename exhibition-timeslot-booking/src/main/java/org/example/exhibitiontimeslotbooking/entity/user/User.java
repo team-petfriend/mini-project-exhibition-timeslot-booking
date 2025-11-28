@@ -63,14 +63,15 @@ public class User {
     private boolean emailVerified;
 
     @Builder
-    private User(String name,
-                 String loginId,
-                 String password,
-                 String email,
-                 FileInfo profileFile,
-                 AuthProvider provider,
-                 String providerId,
-                 boolean emailVerified
+    private User(
+            String name,
+            String loginId,
+            String password,
+            String email,
+            FileInfo profileFile,
+            AuthProvider provider,
+            String providerId,
+            boolean emailVerified
     ) {
         this.name = name;
         this.loginId = loginId;
@@ -105,17 +106,21 @@ public class User {
         this.email = email;
     }
 
-    // == 도메인 로직 == //
-    public void changePassword(String password) {
-        this.password = password;
-    }
-
-    public void updateProfile(String name) {
+    public void updateProfile(String name, String email) {
         this.name = name;
+        this.email = email;
     }
 
     public void updateProfileImage(FileInfo newProfileFile) {
         this.profileFile= newProfileFile;
+    }
+
+    public void updateRoles(Set<Role> newRoles) {
+        this.userRoles.clear();
+
+        for (Role role : newRoles) {
+            this.userRoles.add(new UserRole(this, role));
+        }
     }
 
     public void grantRole(Role role) {
@@ -136,7 +141,4 @@ public class User {
                 .map(Role::getName)
                 .collect(Collectors.toUnmodifiableSet());
     }
-
-
-
 }

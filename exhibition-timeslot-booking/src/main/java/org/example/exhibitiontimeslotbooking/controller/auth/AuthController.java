@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.constants.ApiMappingPattern;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
+import org.example.exhibitiontimeslotbooking.dto.auth.request.LoginRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.auth.request.SignupRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.auth.response.LoginResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.auth.response.SignupResponseDto;
@@ -32,7 +33,7 @@ public class AuthController {
 
     @PostMapping(ApiMappingPattern.Auth.LOGIN)
     public ResponseEntity<ResponseDto<LoginResponseDto>> login(
-            @Valid @RequestBody LoginResponseDto request,
+            @Valid @RequestBody LoginRequestDto request,
             HttpServletResponse response
     ) {
         ResponseDto<LoginResponseDto> result = authService.login(request, response);

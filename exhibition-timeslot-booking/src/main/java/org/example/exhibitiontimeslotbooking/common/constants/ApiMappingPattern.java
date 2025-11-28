@@ -28,7 +28,6 @@ public class ApiMappingPattern {
         public static final String BY_ID = ROOT + ID_ONLY;
         public static final String ME = ROOT + "/me";
         public static final String PROFILE = ME + "/profile";
-        public static final String PROFILE_IMAGE = PROFILE + "/image";
     }
 
     public static final class Roles {
@@ -36,7 +35,7 @@ public class ApiMappingPattern {
 
         public static final String ROOT = BASE + "/roles";
         public static final String GRANT = Users.BY_ID + "/roles";
-        public static final String COLLECT = Users.BY_ID + GRANT + "/{roleName}";
+        public static final String COLLECT =  GRANT + "/{roleName}";
     }
 
     public static final class Venues {
