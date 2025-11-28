@@ -5,17 +5,17 @@ import org.example.exhibitiontimeslotbooking.entity.ticket.Ticket;
 
 import java.time.LocalDateTime;
 
-public record TicketListResponse(
+public record TicketResponse(
         Long id,
         Long bookingId,
         String code,
         TicketStatus ticketStatus,
         LocalDateTime issuedAt,
-        LocalDateTime used
+        LocalDateTime usedAt
 
 ) {
-    public static TicketListResponse from(Ticket ticket){
-        return new TicketListResponse(
+    public static TicketResponse from(Ticket ticket){
+        return new TicketResponse(
                 ticket.getId(),
                 ticket.getBookingId().getId(),
                 ticket.getCode(),
