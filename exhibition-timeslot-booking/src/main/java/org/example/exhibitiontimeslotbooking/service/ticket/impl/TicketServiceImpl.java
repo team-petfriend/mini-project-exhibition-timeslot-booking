@@ -5,6 +5,7 @@ import org.example.exhibitiontimeslotbooking.common.enums.tickets.TicketStatus;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.ticket.response.TicketCodeResponse;
 import org.example.exhibitiontimeslotbooking.dto.ticket.response.TicketResponse;
+import org.example.exhibitiontimeslotbooking.entity.booking.Booking;
 import org.example.exhibitiontimeslotbooking.entity.ticket.Ticket;
 import org.example.exhibitiontimeslotbooking.repository.ticket.TicketRepository;
 import org.example.exhibitiontimeslotbooking.service.ticket.TicketService;
@@ -21,7 +22,7 @@ public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
 
     @Override
-    public ResponseDto<List<TicketResponse>> getTicketByBookingId(Long bookingId) {
+    public ResponseDto<List<TicketResponse>> getTicketByBookingId(Booking bookingId) {
         List<Ticket> tickets = ticketRepository.findByBookingId(bookingId);
         List<TicketResponse> ticketList = tickets.stream()
                 .map(TicketResponse::from)
