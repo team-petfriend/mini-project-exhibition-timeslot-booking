@@ -57,8 +57,13 @@ public enum ErrorCode {
     TIMESLOT_NOT_FOUND(HttpStatus.NOT_FOUND, "T001", "타임슬롯을 찾을 수 없습니다.", "Timeslot not found"),
     TIMESLOT_ALREADY_EXISTS(HttpStatus.CONFLICT, "T002", "타임슬롯이 이미 존재합니다.", "Duplicate timeslot"),
     TIMESLOT_ALREADY_CANCELED(HttpStatus.CONFLICT, "T003", "이미 취소된 타임슬롯입니다.", "Timeslot is Canceled"),
-    TIMESLOT_OUT_OF_EXHIBITION_RANGE(HttpStatus.BAD_REQUEST, "T004", "타임슬롯 시간은 전시회 시작~종료 시간 안에 있어야 합니다.", "slot time exceeds limit");
+    TIMESLOT_OUT_OF_EXHIBITION_RANGE(HttpStatus.BAD_REQUEST, "T004", "타임슬롯 시간은 전시회 시작~종료 시간 안에 있어야 합니다.", "slot time exceeds limit"),
 
+    // ===========================
+    // File (Fxxx)
+    // ===========================
+    FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "F001", "파일을 찾을 수 없습니다.", "File not found"),
+    FILE_CHECK_MAX(HttpStatus.BAD_REQUEST, "F002", "파일 갯수의 최대값은 4개입니다.", "Check File MAX_ATTACH");
 
     private final HttpStatus status;
     private final String code;
