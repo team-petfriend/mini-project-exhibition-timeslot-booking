@@ -90,15 +90,6 @@ public class ExhibitionController {
         return ResponseEntity.ok(data);
     }
 
-    // 전시회 상태 관리자 수정
-    @PutMapping(ApiMappingPattern.Exhibitions.AUTO_STATUS)
-    public ResponseEntity<ResponseDto<ExhibitionDetailResponseDto>> changeAutoStatusExhibition (
-            @PathVariable Long venueId,
-            @PathVariable Long exhibitionId
-    ) {
-        ResponseDto<ExhibitionDetailResponseDto> data = exhibitionService.changeAutoStatusExhibition(venueId, exhibitionId);
 
-        return ResponseEntity.ok(data);
-    }
 
 }

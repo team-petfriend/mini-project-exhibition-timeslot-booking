@@ -58,6 +58,7 @@ public enum ErrorCode {
     TIMESLOT_ALREADY_EXISTS(HttpStatus.CONFLICT, "T002", "타임슬롯이 이미 존재합니다.", "Duplicate timeslot"),
     TIMESLOT_ALREADY_CANCELED(HttpStatus.CONFLICT, "T003", "이미 취소된 타임슬롯입니다.", "Timeslot is Canceled"),
     TIMESLOT_OUT_OF_EXHIBITION_RANGE(HttpStatus.BAD_REQUEST, "T004", "타임슬롯 시간은 전시회 시작~종료 시간 안에 있어야 합니다.", "slot time exceeds limit"),
+    TIMESLOT_CHECK_CAPACITY(HttpStatus.BAD_REQUEST, "T005", "해당 파트타임의 예약 인원이 다찼습니다.", "Check Capacity"),
 
     // ===========================
     // File (Fxxx)

@@ -195,39 +195,24 @@ public class TimeslotServiceImpl implements TimeslotService {
 
     @Override
     @Transactional
-    public ResponseDto<TimeslotDetailResponseDto> changeAutoTimeslot(Long venueId, Long exhibitionId, Long timeslotId) {
+    public void autoUpdateTimeslotStatus() {
 
-        Venue venue = venueRepository.findById(venueId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
+       List<Timeslot> timeslots = timeslotRepository.findAll();
 
-        Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
+       LocalDateTime now = LocalDateTime.now();
 
-        Timeslot timeslot = timeslotRepository.findById(timeslotId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.TIMESLOT_NOT_FOUND));
+        for (Timeslot ts : timeslots ) {
+            if (ts.getSlotsStatus() == SlotStatus.CANCELED) {
+                throw new BusinessException(ErrorCode.TIMESLOT_ALREADY_CANCELED);
+            }
 
-        LocalDateTime today = LocalDateTime.now();
-        LocalDateTime startTime = timeslot.getStartTime();
-        LocalDateTime endTime = timeslot.getEndTime();
-
-
-        if (timeslot.getSlotsStatus() == SlotStatus.CANCELED) {
-            throw new BusinessException(ErrorCode.TIMESLOT_ALREADY_CANCELED);
-        }
-
-
-        if (!today.isBefore(startTime) && !today.isAfter(endTime)) {
-            timeslot.checkStatus(SlotStatus.OPEN);
-        }
-
-
-        if (today.isBefore(startTime) ||today.isAfter(endTime)) {
-            timeslot.checkStatus(SlotStatus.CLOSED);
-        }
-
-        TimeslotDetailResponseDto data = TimeslotDetailResponseDto.from(timeslot);
-
-
-        return ResponseDto.success("타임슬롯이 자동 업데이트 됐습니다.", data);
+           if (ts.getStartTime().isAfter(now) || ts.getEndTime().isBefore(now)) {
+               ts.checkStatus(SlotStatus.CLOSED);
+           } else if (!ts.getStartTime().isAfter(now) && !ts.getEndTime().isBefore(now)) {
+               ts.checkStatus(SlotStatus.OPEN);
+           }
+       }
+        ResponseDto.success("타임슬롯이 자동 업데이트 되었습니다.", null);
     }
+
 }
