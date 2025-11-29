@@ -95,17 +95,4 @@ public class TimeSlotController {
         return ResponseEntity.ok(data);
     }
 
-    // 상태 자동수정
-    @PutMapping(ApiMappingPattern.Timeslots.AUTO_STATUS)
-    public ResponseEntity<ResponseDto<TimeslotDetailResponseDto>> changeAutoTimeslot(
-            @PathVariable Long venueId,
-            @PathVariable Long exhibitionId,
-            @PathVariable Long timeslotId
-    ) {
-        ResponseDto<TimeslotDetailResponseDto> data = timeslotService.changeAutoTimeslot(venueId, exhibitionId, timeslotId);
-
-        return ResponseEntity.ok(data);
-    }
-
-
 }

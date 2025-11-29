@@ -21,5 +21,5 @@ public interface TimeslotService {
 
     ResponseDto<TimeslotDetailResponseDto> changeTimeslot(Long venueId, Long exhibitionId, Long timeslotId, TimeslotStatusChangeRequestDto request);
 
-    ResponseDto<TimeslotDetailResponseDto> changeAutoTimeslot(Long venueId, Long exhibitionId, Long timeslotId);
+    void autoUpdateTimeslotStatus();
 }

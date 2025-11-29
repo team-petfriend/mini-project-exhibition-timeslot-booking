@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface ExhibitionService {
 
-
-
     ResponseDto<ExhibitionDetailResponseDto> getByIdExhibition(Long venueId, Long exhibitionId);
 
     ResponseDto<ExhibitionDetailResponseDto> updateExhibition(Long venueId, Long exhibitionId, ExhibitionsUpdateRequestDto request);
@@ -25,5 +23,5 @@ public interface ExhibitionService {
 
     ResponseDto<Void> deleteExhibition(Long venueId, Long exhibitionId);
 
-    ResponseDto<ExhibitionDetailResponseDto> changeAutoStatusExhibition(Long venueId, Long exhibitionId);
+    void autoUpdateExhibitionStatus();
 }
