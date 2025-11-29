@@ -58,7 +58,7 @@ public class ApiMappingPattern {
         public static final String BY_ID = ROOT + ID_ONLY;
 
         public static final String EXHIBITION_FILE = BY_ID + "/files";
-        public static final String EXHIBITION_FILE_ID = EXHIBITION_FILE + "/{fileId}";
+        public static final String EXHIBITION_FILE_ID = "/{fileId}";
 
         public static final String SEARCH = ROOT + "/search";
         public static final String PAGE = ROOT + "/page";

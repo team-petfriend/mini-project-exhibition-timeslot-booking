@@ -36,6 +36,9 @@ public class FileServiceImpl {
     @Value("${file.upload.reviews-img}")
     private String reviewsPath;
 
+    @Value("${file.upload.exhibitions-img}")
+    private String exhibitionsPath;
+
     private  final FileInfoRepository fileInfoRepository;
 
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
@@ -136,6 +139,45 @@ public class FileServiceImpl {
             throw new FileStorageException(ErrorCode.INTERNAL_ERROR, "" ,e);
         }
     }
+
+    public FileInfo saveExhibitionImg(Long exhibitionId, MultipartFile file) {
+
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        validateFile(file);
+
+        try {
+            String original = file.getOriginalFilename();
+            String cleanName = StringUtils.cleanPath(original);
+            String storedName = generateStoredName(cleanName);
+
+            String relativePath = exhibitionsPath + "/" + exhibitionId;
+            String fullDir = basePath + "/" + relativePath;
+
+            ensureDirectory(fullDir);
+
+            Path path = Paths.get(fullDir + "/" + storedName);
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+            FileInfo info = FileInfo.builder()
+                    .originalName(cleanName)
+                    .storedName(storedName)
+                    .contentType(file.getContentType())
+                    .fileSize(file.getSize())
+                    .filePath(path.toString())
+                    .createdAt(LocalDateTime.now())
+                    .build();
+
+            return fileInfoRepository.save(info);
+
+        } catch (Exception e) {
+            throw new FileStorageException(ErrorCode.INTERNAL_ERROR, "", e);
+        }
+
+    }
+
 
     public FileInfo saveVenueImg(MultipartFile file) {
 
