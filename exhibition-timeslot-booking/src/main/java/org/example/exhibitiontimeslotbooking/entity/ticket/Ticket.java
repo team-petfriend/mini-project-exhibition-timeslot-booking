@@ -52,4 +52,17 @@ public class Ticket {
     }
 
 
+    public void setTicketState(TicketStatus ticketStatus) {
+        if(ticketStatus == TicketStatus.USED){
+            throw new IllegalArgumentException("이미 사용된 티켓의 상태를 변경할 수 없습니다.");
+        }
+        this.ticketStatus = ticketStatus;
+    }
+
+    public void setUsedAt(LocalDateTime now) {
+        if(this.usedAt != null){
+            throw new IllegalArgumentException("이미 사용된 티켓입니다.");
+        }
+        this.usedAt = now;
+    }
 }
