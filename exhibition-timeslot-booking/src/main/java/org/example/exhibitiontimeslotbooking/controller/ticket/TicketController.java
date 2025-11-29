@@ -43,8 +43,8 @@ public class TicketController {
     }
 
     @GetMapping(ApiMappingPattern.Tickets.TICKET_SCAN)
-    public ResponseEntity<ResponseDto<TicketCodeResponse>> scanTicket(@RequestParam String code){
-        ResponseDto<TicketCodeResponse> response = ticketService.scanTicket(code);
+    public ResponseEntity<ResponseDto<TicketResponse>> scanTicket(@RequestParam String code){
+        ResponseDto<TicketResponse> response = ticketService.scanTicket(code);
         return ResponseEntity.ok().body(response);
     }
 

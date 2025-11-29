@@ -13,5 +13,5 @@ public interface TicketService {
 
     ResponseDto<Void> voidTicket(Long ticketId);
 
-    ResponseDto<TicketCodeResponse> scanTicket(String code);
+    ResponseDto<TicketResponse> scanTicket(String code);
 }
