@@ -5,6 +5,7 @@ import org.example.exhibitiontimeslotbooking.common.constants.ApiMappingPattern;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.ticket.response.TicketCodeResponse;
 import org.example.exhibitiontimeslotbooking.dto.ticket.response.TicketResponse;
+import org.example.exhibitiontimeslotbooking.entity.booking.Booking;
 import org.example.exhibitiontimeslotbooking.service.ticket.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class TicketController {
 
     @GetMapping(ApiMappingPattern.Tickets.TICKETS)
     public ResponseEntity<ResponseDto<List<TicketResponse>>> getTicketByBookingId(
-            @PathVariable Long bookingId
+            @PathVariable Booking bookingId
     ) {
         ResponseDto<List<TicketResponse>> response = ticketService.getTicketByBookingId(bookingId);
         return ResponseEntity.ok().body(response);

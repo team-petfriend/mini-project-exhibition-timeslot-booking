@@ -1,5 +1,6 @@
 package org.example.exhibitiontimeslotbooking.repository.ticket;
 
+import org.example.exhibitiontimeslotbooking.entity.booking.Booking;
 import org.example.exhibitiontimeslotbooking.entity.ticket.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    List<Ticket> findByBookingId(Long bookingId);
+    List<Ticket> findByBookingId(Booking bookingId);
 
     Optional<Ticket> findByCode(String code);
 }
