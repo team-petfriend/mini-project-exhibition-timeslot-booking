@@ -1,5 +1,6 @@
 package org.example.exhibitiontimeslotbooking.dto.auth.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.example.exhibitiontimeslotbooking.common.enums.AuthProvider;
@@ -16,10 +17,11 @@ public record SignupRequestDto(
         String loginId,
 
         @NotBlank(message = "비밀번호는 필수값입니다.")
-        @Size(max = 100, message = "비밀번호는 100자 내로 작성하세요")
+        @Size(min = 8, max = 100, message = "비밀번호는 최소 8자 이상이어야 합니다.")
         String password,
 
         @NotBlank(message = "이메일은 필수값입니다.")
+        @Email(message = "이메일 형식이 올바르지 않습니다.")
         String email,
 
         AuthProvider provider

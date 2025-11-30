@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        user.updateProfile(request.getName(), request.getEmail());
+        user.updateProfile(request.name(), request.email());
 
         User updated = userRepository.save(user);
 
@@ -95,10 +95,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        user.updateProfile(request.getName(), request.getEmail());
+        user.updateProfile(request.name(), request.email());
 
-        if (request.getRoles() != null && !request.getRoles().isEmpty()) {
-            Set<Role> roles = request.getRoles().stream()
+        if (request.roles() != null && !request.roles().isEmpty()) {
+            Set<Role> roles = request.roles().stream()
                     .map(roleType -> roleRepository.findByName(roleType)
                             .orElseThrow(() -> new EntityNotFoundException("해당 역할을 찾을 수 없습니다: " + roleType)))
                     .collect(Collectors.toSet());

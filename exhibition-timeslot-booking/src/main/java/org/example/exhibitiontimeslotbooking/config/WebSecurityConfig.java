@@ -131,7 +131,6 @@ public class WebSecurityConfig {
                                     "/favicon.ico",
                                     "/error").permitAll()
 
-                            .requestMatchers(HttpMethod.GET, "/api/v1/boards/**").permitAll() // 게시판 조회 기능
 
                             // 인증된 사용자만 사용 가능 (인가, 권한 X)
                             // : HttpMethod는 선택값, URL 경로는 필수
