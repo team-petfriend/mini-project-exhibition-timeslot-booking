@@ -35,12 +35,20 @@ CREATE TABLE users (
   login_id VARCHAR(50) NOT NULL,
   password VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
+  
   profile_file_id BIGINT NULL,
+  
+  provider varchar(20) not null,
+  provider_id varchar(100),
+  email_verified boolean not null,
+  
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   UNIQUE KEY uk_login (login_id),
-  UNIQUE KEY uk_email (email),
-  CONSTRAINT fk_users_profile_file FOREIGN KEY (profile_file_id) REFERENCES file_infos(id) ON DELETE SET NULL
+  -- UNIQUE KEY uk_email (email),
+  CONSTRAINT `uk_users_provider_provider_id` UNIQUE(provider, provider_id),
+  CONSTRAINT `chk_users_provider` CHECK(provider IN ('LOCAL', 'GOOGLE', 'KAKAO', 'NAVER')),
+  CONSTRAINT `fk_users_profile_file` FOREIGN KEY (profile_file_id) REFERENCES file_infos(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE roles (
