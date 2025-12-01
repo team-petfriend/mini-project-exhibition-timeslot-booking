@@ -7,7 +7,6 @@ import java.util.Set;
 public record AdminUserUpdateRequest(
         String name,
         String email,
-        Boolean enabled,
         Set<RoleType> roles
 ) {
 }

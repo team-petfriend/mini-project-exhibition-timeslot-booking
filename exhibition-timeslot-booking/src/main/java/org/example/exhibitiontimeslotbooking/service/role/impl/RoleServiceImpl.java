@@ -24,6 +24,7 @@ public class RoleServiceImpl implements RoleService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
 
+
     @Override
     public List<RoleResponseDto> getAllRoles() {
         return roleRepository.findAll()
@@ -34,11 +35,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public void addRoleToUser(String userId, String roleName) {
-        User user = userRepository.findByLoginId(userId)
+    public void addRoleToUser(long userId, RoleType roleName) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("유저가 없습니다"));
 
-        Role role = roleRepository.findByName(RoleType.valueOf(roleName))
+        Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new RuntimeException("해당 역할이 없습니다"));
 
         userRoleRepository.save(new UserRole(user, role));
@@ -47,7 +48,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public void removeRoleFromUser(Long userId, String roleName) {
+    public void removeRoleFromUser(Long userId, RoleType roleName) {
         UserRole userRole = userRoleRepository
                 .findByUserIdAndRoleName(userId, roleName)
                 .orElseThrow(() -> new RuntimeException("해당 유저의 역할이 없습니다."));

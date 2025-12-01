@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.auth.request.LoginRequestDto;
@@ -12,10 +13,14 @@ import org.example.exhibitiontimeslotbooking.dto.auth.request.SignupRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.auth.response.LoginResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.auth.response.SignupResponseDto;
 import org.example.exhibitiontimeslotbooking.entity.auth.RefreshToken;
+import org.example.exhibitiontimeslotbooking.entity.user.Role;
 import org.example.exhibitiontimeslotbooking.entity.user.User;
+import org.example.exhibitiontimeslotbooking.entity.user.UserRole;
 import org.example.exhibitiontimeslotbooking.exception.BusinessException;
 import org.example.exhibitiontimeslotbooking.repository.auth.RefreshTokenRepository;
+import org.example.exhibitiontimeslotbooking.repository.user.RoleRepository;
 import org.example.exhibitiontimeslotbooking.repository.user.UserRepository;
+import org.example.exhibitiontimeslotbooking.repository.user.UserRoleRepository;
 import org.example.exhibitiontimeslotbooking.security.provider.JwtProvider;
 import org.example.exhibitiontimeslotbooking.security.user.UserPrincipalMapper;
 import org.example.exhibitiontimeslotbooking.security.util.CookieUtils;
@@ -40,8 +45,10 @@ public class AuthServiceImpl implements AuthService {
     private final JwtProvider jwtProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
     private final UserPrincipalMapper userPrincipalMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Value("${app.oauth2.authorized-redirect-uri}")
     private String redirectUri;
@@ -55,8 +62,6 @@ public class AuthServiceImpl implements AuthService {
             throw new BusinessException(ErrorCode.DUPLICATE_USER);
         }
 
-        System.out.println("provider name:" + request.provider().name());
-
         User newUser = User.builder()
                 .name(request.name())
                 .loginId(request.loginId())
@@ -66,6 +71,12 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         userRepository.save(newUser);
+
+        Role userRole = roleRepository.findByName(RoleType.USER)
+                        .orElseThrow(() -> new RuntimeException("권한을 찾지 못하였습니다."));
+
+        UserRole newUserRole = new UserRole(newUser, userRole);
+        userRoleRepository.save(newUserRole);
 
         return ResponseDto.success(
                 "회원가입 완료",

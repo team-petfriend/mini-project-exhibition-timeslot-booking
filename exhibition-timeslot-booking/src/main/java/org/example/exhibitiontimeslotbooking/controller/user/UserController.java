@@ -2,6 +2,7 @@ package org.example.exhibitiontimeslotbooking.controller.user;
 
 import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.constants.ApiMappingPattern;
+import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.user.request.AdminUserUpdateRequest;
 import org.example.exhibitiontimeslotbooking.dto.user.request.UserMeUpdateRequest;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping(ApiMappingPattern.Users.ROOT)
+@RequestMapping
 @RequiredArgsConstructor
 public class UserController {
 
@@ -52,10 +53,10 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
+    @GetMapping(ApiMappingPattern.Users.ROOT)
     public ResponseEntity<ResponseDto<?>> getUserList(
             @RequestParam(required = false) String q,
-            @RequestParam(required = false) String role,
+            @RequestParam(required = false) RoleType role,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt,desc") String sort
@@ -82,5 +83,4 @@ public class UserController {
         ResponseDto<UserResponseDto> result = userService.adminUpdateUser(userId, request);
         return ResponseEntity.status(result.getStatus()).body(result);
     }
-
 }

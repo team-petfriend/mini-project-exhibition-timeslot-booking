@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.enums.AuthProvider;
 import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
+import org.example.exhibitiontimeslotbooking.entity.base.BaseTimeEntity;
 import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
 import org.example.exhibitiontimeslotbooking.entity.review.Review;
 
@@ -24,15 +25,15 @@ import java.util.stream.Collectors;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "name", updatable = false, nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "login_id", nullable = false, length = 50)
+    @Column(name = "login_id", updatable = false, nullable = false, length = 50)
     private String loginId;
 
     @Column(name = "password", nullable = false, length = 255)
@@ -46,7 +47,7 @@ public class User {
         foreignKey = @ForeignKey(name = "fk_users_profile_file"))
     private FileInfo profileFile;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -107,8 +108,8 @@ public class User {
     }
 
     public void updateProfile(String name, String email) {
-        this.name = name;
-        this.email = email;
+        if (name != null) this.name = name;
+        if (name != null) this.email = email;
     }
 
     public void updateProfileImage(FileInfo newProfileFile) {
