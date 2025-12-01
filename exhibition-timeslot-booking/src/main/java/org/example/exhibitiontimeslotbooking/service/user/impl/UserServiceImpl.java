@@ -2,6 +2,7 @@ package org.example.exhibitiontimeslotbooking.service.user.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.user.request.AdminUserUpdateRequest;
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public ResponseDto<UserResponseDto> updateMe(Long id, UserMeUpdateRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
@@ -64,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseDto<?> getUsers(String q, String role, int page, int size, String sort) {
+    public ResponseDto<?> getUsers(String q, RoleType role, int page, int size, String sort) {
         String[] sortParams = sort.split(",");
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(
                 "asc".equalsIgnoreCase(sortParams[1])

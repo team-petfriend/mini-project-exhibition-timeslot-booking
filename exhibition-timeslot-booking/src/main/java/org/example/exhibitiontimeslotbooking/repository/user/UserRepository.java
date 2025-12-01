@@ -1,6 +1,7 @@
 package org.example.exhibitiontimeslotbooking.repository.user;
 
 import org.example.exhibitiontimeslotbooking.common.enums.AuthProvider;
+import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 import org.example.exhibitiontimeslotbooking.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,5 +33,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
         where (:q is null or u.name like %:q%)
         and (:role is null or r.name = :role)
     """)
-    Page<User> searchUsers(@Param("q") String q, @Param("role") String role, Pageable pageable);
+    Page<User> searchUsers(@Param("q") String q, @Param("role") RoleType role, Pageable pageable);
 }

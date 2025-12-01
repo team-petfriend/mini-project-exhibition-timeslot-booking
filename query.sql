@@ -53,7 +53,7 @@ CREATE TABLE users (
 
 CREATE TABLE roles (
   role_name VARCHAR(30) PRIMARY KEY,
-  CONSTRAINT `chk_roles_role_name` CHECK(role_name IN ('ROLE_USER', 'ROLE_ADMIN', 'ROLE_STAFF'))
+  CONSTRAINT `chk_roles_role_name` CHECK(role_name IN ('USER', 'ADMIN', 'STAFF'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE user_roles (
@@ -195,3 +195,11 @@ CREATE TABLE review_files (
     CONSTRAINT fk_review_files_reviews FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE,
     CONSTRAINT fk_review_files_file_info FOREIGN KEY (file_id) REFERENCES file_infos(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+INSERT INTO roles (role_name) VALUES 
+('USER'),
+('ADMIN'),
+('STAFF');
+
+-- INSERT INTO user_roles (user_id, role_name)
+-- VALUES (1, 'ADMIN');
