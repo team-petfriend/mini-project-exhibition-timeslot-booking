@@ -14,6 +14,7 @@ import org.example.exhibitiontimeslotbooking.repository.file.ExhibitionFileRepos
 import org.example.exhibitiontimeslotbooking.repository.file.FileInfoRepository;
 import org.example.exhibitiontimeslotbooking.service.exhibition.ExhibitionFileService;
 import org.example.exhibitiontimeslotbooking.service.file.FileServiceImpl;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +36,7 @@ public class ExhibitionFileServiceImpl implements ExhibitionFileService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<Void> uploadExhibitionFiles(Long exhibitionId, List<MultipartFile> files) {
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
@@ -67,6 +69,7 @@ public class ExhibitionFileServiceImpl implements ExhibitionFileService {
 
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<List<ExhibitionFileResponseDto>> getByIdExhibitionFiles(Long exhibitionId) {
 
         List<ExhibitionFile> exhibitionFiles = exhibitionFileRepository.findByExhibitionIdOrderByDisplayOrderAsc(exhibitionId);
@@ -82,6 +85,7 @@ public class ExhibitionFileServiceImpl implements ExhibitionFileService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<Void> deleteExhibitionFile(Long exhibitionId, Long fileId) {
 
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
@@ -100,6 +104,7 @@ public class ExhibitionFileServiceImpl implements ExhibitionFileService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<Void> updateExhibitionFiles(Long exhibitionId, ExhibitionsFileUpdateRequestDto request) {
 
         List<MultipartFile> newFiles = request.newFiles();

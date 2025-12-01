@@ -19,6 +19,7 @@ import org.example.exhibitiontimeslotbooking.repository.exhibition.ExhibitionRep
 import org.example.exhibitiontimeslotbooking.repository.timeslot.TimeslotRepository;
 import org.example.exhibitiontimeslotbooking.repository.venue.VenueRepository;
 import org.example.exhibitiontimeslotbooking.service.timeslot.TimeslotService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,7 @@ public class TimeslotServiceImpl implements TimeslotService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseDto<TimeslotDetailResponseDto> createTimeslot(Long venueId, Long exhibitionId, TimeslotCreateRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -77,6 +79,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public ResponseDto<List<TimeslotDetailResponseDto>> getAllTimeslot(Long venueId, Long exhibitionId) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -84,8 +87,6 @@ public class TimeslotServiceImpl implements TimeslotService {
 
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
-
-
 
         List<Timeslot> timeslots = timeslotRepository.findAll();
 
@@ -97,6 +98,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseDto<TimeslotDetailResponseDto> getByIdTimeslot(Long venueId, Long exhibitionId, Long timeslotId) {
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
@@ -114,6 +116,7 @@ public class TimeslotServiceImpl implements TimeslotService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseDto<TimeslotDetailResponseDto> updateTimeslot(Long venueId, Long exhibitionId, Long timeslotId, TimeslotUpdateRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -144,6 +147,7 @@ public class TimeslotServiceImpl implements TimeslotService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseDto<Void> deleteTimeslot(Long venueId, Long exhibitionId, Long timeslotId) {
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
@@ -161,6 +165,7 @@ public class TimeslotServiceImpl implements TimeslotService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseDto<TimeslotDetailResponseDto> changeTimeslot(Long venueId, Long exhibitionId, Long timeslotId, TimeslotStatusChangeRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)

@@ -11,6 +11,7 @@ import org.example.exhibitiontimeslotbooking.entity.venue.Venue;
 import org.example.exhibitiontimeslotbooking.exception.BusinessException;
 import org.example.exhibitiontimeslotbooking.repository.venue.VenueRepository;
 import org.example.exhibitiontimeslotbooking.service.venue.VenueService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class VenueServiceImpl implements VenueService {
     // 생성
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<VenueDetailResponseDto> createVenue(VenuesCreateRequestDto request) {
         Venue venue = Venue.builder()
                         .name(request.name())
@@ -43,6 +45,7 @@ public class VenueServiceImpl implements VenueService {
 
     // 전체 조회
     @Override
+    @PreAuthorize("permitAll()")
     public ResponseDto<List<VenueSummaryDto>> getAllVenues() {
 
         List<Venue> venues = venueRepository.findAll();
@@ -56,6 +59,7 @@ public class VenueServiceImpl implements VenueService {
 
     // 조회
     @Override
+    @PreAuthorize("permitAll()")
     public ResponseDto<VenueDetailResponseDto> getByIdVenue(Long venueId) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -69,6 +73,7 @@ public class VenueServiceImpl implements VenueService {
     // 수정
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<VenueDetailResponseDto> updateVenue(Long venueId, VenuesUpdateRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -91,6 +96,7 @@ public class VenueServiceImpl implements VenueService {
     // 삭제
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<Void> deleteVenue(Long venueId) {
 
         Venue venue = venueRepository.findById(venueId)
