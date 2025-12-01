@@ -6,6 +6,7 @@ import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
 import org.example.exhibitiontimeslotbooking.entity.venue.Venue;
 import org.example.exhibitiontimeslotbooking.repository.file.FileInfoRepository;
 import org.example.exhibitiontimeslotbooking.repository.venue.VenueRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ public class VenueFileServiceImpl {
 
     // 파일 생성
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public FileInfo updateVenueFile(Long venueId, MultipartFile file) {
 
         Venue venue = venueRepository.findById(venueId)

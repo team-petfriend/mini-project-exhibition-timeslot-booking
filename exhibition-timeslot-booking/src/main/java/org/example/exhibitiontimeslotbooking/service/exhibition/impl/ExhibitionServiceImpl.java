@@ -17,6 +17,7 @@ import org.example.exhibitiontimeslotbooking.repository.exhibition.ExhibitionRep
 import org.example.exhibitiontimeslotbooking.repository.venue.VenueRepository;
 import org.example.exhibitiontimeslotbooking.service.exhibition.ExhibitionService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<ExhibitionDetailResponseDto> createExhibition(Long venueId, ExhibitionsCreateRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -57,6 +59,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public ResponseDto<List<ExhibitionSummaryDto>> getAllExhibition(Long venueId) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -75,6 +78,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
 
     @Override
+    @PreAuthorize("permitAll()")
     public ResponseDto<ExhibitionDetailResponseDto> getByIdExhibition(Long venueId, Long exhibitionId) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -90,6 +94,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<Void> deleteExhibition(Long venueId, Long exhibitionId) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -105,6 +110,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<ExhibitionDetailResponseDto> updateExhibition(Long venueId, Long exhibitionId, ExhibitionsUpdateRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -130,6 +136,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseDto<ExhibitionDetailResponseDto> changeStatusExhibition(Long venueId, Long exhibitionId, ExhibitionsStatusUpdateRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)
