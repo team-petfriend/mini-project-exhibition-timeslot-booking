@@ -48,11 +48,11 @@ public class Exhibition extends BaseTimeEntity {
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     private ExhibitionStatus exhibitionStatus = ExhibitionStatus.SCHEDULED;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "capacity_policy", nullable = false)
     private CapacityPolicy capacityPolicy = CapacityPolicy.PER_DAY;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

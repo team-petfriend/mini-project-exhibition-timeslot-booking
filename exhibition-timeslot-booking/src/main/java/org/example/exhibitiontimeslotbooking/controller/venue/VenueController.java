@@ -9,9 +9,12 @@ import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesCreateRequ
 import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.response.VenueDetailResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.response.VenueSummaryDto;
+import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
+import org.example.exhibitiontimeslotbooking.service.file.VenueFileServiceImpl;
 import org.example.exhibitiontimeslotbooking.service.venue.VenueService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,6 +24,7 @@ import java.util.List;
 public class VenueController {
 
     private final VenueService venueService;
+    private final VenueFileServiceImpl venueFileService;
 
     // 생성
     @PostMapping
@@ -62,6 +66,16 @@ public class VenueController {
     @DeleteMapping(ApiMappingPattern.Venues.ID_ONLY)
     public ResponseEntity<ResponseDto<Void>> deleteVenue(@PathVariable Long venueId) {
         ResponseDto<Void> data = venueService.deleteVenue(venueId);
+
+        return ResponseEntity.ok(data);
+    }
+
+    @PostMapping(ApiMappingPattern.Venues.VENUE_FILE)
+    public ResponseEntity<ResponseDto<?>> uploadVenueFile(
+            @PathVariable Long venueId,
+            @RequestParam("file")MultipartFile file
+            ) {
+        ResponseDto<FileInfo> data = venueFileService.updateVenueFile(venueId, file);
 
         return ResponseEntity.ok(data);
     }

@@ -39,7 +39,7 @@ public class Timeslot extends BaseTimeEntity {
     private int reserved = 0;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     private SlotStatus slotsStatus = SlotStatus.OPEN;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

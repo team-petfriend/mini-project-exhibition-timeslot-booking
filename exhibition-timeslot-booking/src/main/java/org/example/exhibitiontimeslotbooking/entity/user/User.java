@@ -79,7 +79,7 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.email = email;
         this.profileFile = profileFile;
-        this.provider = provider;
+        this.provider = provider != null ? provider : AuthProvider.LOCAL;
         this.providerId = providerId;
         this.emailVerified = emailVerified;
     }

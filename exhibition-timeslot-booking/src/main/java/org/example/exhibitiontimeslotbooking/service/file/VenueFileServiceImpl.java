@@ -2,6 +2,7 @@ package org.example.exhibitiontimeslotbooking.service.file;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
 import org.example.exhibitiontimeslotbooking.entity.venue.Venue;
 import org.example.exhibitiontimeslotbooking.repository.file.FileInfoRepository;
@@ -21,8 +22,8 @@ public class VenueFileServiceImpl {
 
     // 파일 생성
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
-    public FileInfo updateVenueFile(Long venueId, MultipartFile file) {
+//    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseDto<FileInfo>  updateVenueFile(Long venueId, MultipartFile file) {
 
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 venue의 ID가 존재하지 않습니다. : " + venueId));
@@ -41,7 +42,7 @@ public class VenueFileServiceImpl {
         venue.changedFile(saved);
         venueRepository.save(venue);
 
-        return saved;
+        return ResponseDto.success("전시장 파일을 업로드했습니다.", null);
     }
 
     // 파일 삭제 구현
