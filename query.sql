@@ -3,6 +3,7 @@ CREATE DATABASE IF NOT EXISTS `mini-exhibition-db`
   CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `mini-exhibition-db`;
 
+DROP TABLE IF EXISTS review_files;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS tickets;
@@ -12,12 +13,19 @@ DROP TABLE IF EXISTS exhibitions;
 DROP TABLE IF EXISTS venues;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS refresh_tokens;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS file_infos;
+DROP TABLE IF EXISTS exhibition_file_infos;
+
+SELECT * FROM venues;
+SELECT * FROM exhibitions;
+
+SELECT * FROM users;
 
 
 CREATE TABLE file_infos (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     
     original_name VARCHAR(255) NOT NULL,
     stored_name VARCHAR(255) NOT NULL,
@@ -26,6 +34,7 @@ CREATE TABLE file_infos (
     file_path VARCHAR(255) NOT NULL,
     
     created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+    
 ) ENGINE=InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- 공통(유저/권한)
@@ -81,13 +90,17 @@ CREATE TABLE refresh_tokens (
 ) ENGINE=InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- 전시장/전시
-CREATE TABLE venues (
+CREATE TABLE venues(
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  file_id BIGINT NULL,
+  
   name VARCHAR(120) NOT NULL,
   address VARCHAR(255) NULL,
-  latitude DECIMAL(10,7) NULL,
-  longitude DECIMAL(10,7) NULL,
-  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+  latitude DECIMAL(11,8) NULL,
+  longitude DECIMAL(12,8) NULL,
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  CONSTRAINT `fk_venues_file` FOREIGN KEY (file_id) REFERENCES file_infos(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE exhibitions (
@@ -101,11 +114,21 @@ CREATE TABLE exhibitions (
   capacity_policy VARCHAR(20) NOT NULL DEFAULT 'PER_SLOT', -- PER_DAY, PER_SLOT
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  CONSTRAINT fk_exhibition_venues_id FOREIGN KEY (venue_id) REFERENCES venues(id),
+  CONSTRAINT fk_exhibition_venue FOREIGN KEY (venue_id) REFERENCES venues(id),
   CHECK (status IN ('SCHEDULED','OPEN','CLOSED','CANCELED')),
   CHECK (capacity_policy IN ('PER_DAY','PER_SLOT')),
   INDEX idx_exhibitions_venue (venue_id, status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE exhibition_file_infos (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	exhibition_id BIGINT NOT NULL,
+	file_id BIGINT NOT NULL,
+	display_order INT DEFAULT 0,
+	CONSTRAINT fk_exhibition_files_exhibition FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id) ON DELETE CASCADE,
+	CONSTRAINT fk_exhibition_files_file_info FOREIGN KEY (file_id) REFERENCES file_infos(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- 타임슬롯
 CREATE TABLE timeslots (
@@ -118,7 +141,7 @@ CREATE TABLE timeslots (
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN', -- OPEN/CLOSED/CANCELED
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  CONSTRAINT fk_timeslots_exhibition_id FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
+  CONSTRAINT fk_timeslot_exhibition FOREIGN KEY (exhibition_id) REFERENCES exhibitions(id),
   CHECK (status IN ('OPEN','CLOSED','CANCELED')),
   CHECK (reserved >= 0 AND reserved <= capacity),
   UNIQUE KEY uk_slot_unique (exhibition_id, start_time, end_time),
@@ -196,10 +219,17 @@ CREATE TABLE review_files (
     CONSTRAINT fk_review_files_file_info FOREIGN KEY (file_id) REFERENCES file_infos(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+
 INSERT INTO roles (role_name) VALUES 
 ('USER'),
 ('ADMIN'),
 ('STAFF');
 
--- INSERT INTO user_roles (user_id, role_name)
--- VALUES (1, 'ADMIN');
+INSERT INTO user_roles (user_id, role_name)
+VALUES (2, 'ADMIN');
+
+
+INSERT INTO users
+(created_at, updated_at, email, email_verified, login_id, name, password, provider, provider_id)
+VALUES
+(NOW(), NOW(), 'test@example.com', true, 'testuser', '테스트유저', '암호화된패스워드', 'LOCAL', 'dummy_provider_id');
