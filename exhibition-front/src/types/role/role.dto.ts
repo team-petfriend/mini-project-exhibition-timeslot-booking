@@ -1,7 +1,14 @@
-export interface RoleReqest {}
+export type RoleType = "USER" | "ADMIN" | "STAFF";
+export interface RoleReqest {
+  roles: RoleType[];
+}
 
-export interface RoleResponse {}
+export interface RoleUser {
+  loginId: string;
+  name: string;
+}
 
-export interface RoleAddResponse {}
-
-export interface RoleRemoveResponse {}
+export interface RoleResponse {
+  roleName: string;
+  users: RoleUser[];
+}

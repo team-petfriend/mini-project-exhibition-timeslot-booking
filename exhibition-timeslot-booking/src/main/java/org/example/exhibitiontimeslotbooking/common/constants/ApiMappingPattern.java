@@ -1,7 +1,5 @@
 package org.example.exhibitiontimeslotbooking.common.constants;
 
-import jakarta.persistence.criteria.Root;
-
 public class ApiMappingPattern {
     private ApiMappingPattern() {}
 
@@ -24,7 +22,7 @@ public class ApiMappingPattern {
         private Users() {}
 
         public static final String ROOT = BASE + "/users";
-        public static final String ID_ONLY = ROOT + "/{userId}";
+        public static final String BY_ID = ROOT + "/{userId}";
         public static final String ME = ROOT + "/me";
         public static final String PROFILE = ME + "/profile";
     }
@@ -33,7 +31,7 @@ public class ApiMappingPattern {
         private Roles() {}
 
         public static final String ROOT = BASE + "/roles";
-        public static final String GRANT = Users.ID_ONLY + "/roles";
+        public static final String GRANT = Users.BY_ID + "/roles";
         public static final String COLLECT =  GRANT + "/{roleName}";
     }
 

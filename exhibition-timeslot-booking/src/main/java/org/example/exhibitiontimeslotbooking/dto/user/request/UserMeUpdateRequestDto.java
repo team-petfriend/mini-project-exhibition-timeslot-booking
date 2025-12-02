@@ -1,6 +1,6 @@
 package org.example.exhibitiontimeslotbooking.dto.user.request;
 
-public record UserMeUpdateRequest (
+public record UserMeUpdateRequestDto(
         String name,
         String email
 ) {

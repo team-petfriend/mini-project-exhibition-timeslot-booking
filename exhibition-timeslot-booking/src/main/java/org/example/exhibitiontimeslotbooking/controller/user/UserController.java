@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.constants.ApiMappingPattern;
 import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
-import org.example.exhibitiontimeslotbooking.dto.user.request.AdminUserUpdateRequest;
-import org.example.exhibitiontimeslotbooking.dto.user.request.UserMeUpdateRequest;
+import org.example.exhibitiontimeslotbooking.dto.user.request.AdminUserUpdateRequestDto;
+import org.example.exhibitiontimeslotbooking.dto.user.request.UserMeUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.user.response.MeResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.user.response.UserResponseDto;
 import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
@@ -37,7 +37,7 @@ public class UserController {
     @PutMapping(ApiMappingPattern.Users.ME)
     public ResponseEntity<ResponseDto<UserResponseDto>> updateMe(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @RequestBody UserMeUpdateRequest request
+            @RequestBody UserMeUpdateRequestDto request
     ) {
         ResponseDto<UserResponseDto> result = userService.updateMe(userPrincipal.getId(), request);
         return ResponseEntity.status(result.getStatus()).body(result);
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(ApiMappingPattern.Users.ID_ONLY)
+    @GetMapping(ApiMappingPattern.Users.BY_ID)
     public ResponseEntity<ResponseDto<UserResponseDto>> getById(
             @PathVariable Long userId
     ) {
@@ -75,10 +75,10 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(ApiMappingPattern.Users.ID_ONLY)
+    @PutMapping(ApiMappingPattern.Users.BY_ID)
     public ResponseEntity<ResponseDto<UserResponseDto>> adminUpdateUser(
             @PathVariable Long userId,
-            @RequestBody AdminUserUpdateRequest request
+            @RequestBody AdminUserUpdateRequestDto request
     ) {
         ResponseDto<UserResponseDto> result = userService.adminUpdateUser(userId, request);
         return ResponseEntity.status(result.getStatus()).body(result);

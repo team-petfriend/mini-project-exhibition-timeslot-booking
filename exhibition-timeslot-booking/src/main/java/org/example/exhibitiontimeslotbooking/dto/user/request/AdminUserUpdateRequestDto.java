@@ -4,7 +4,7 @@ import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 
 import java.util.Set;
 
-public record AdminUserUpdateRequest(
+public record AdminUserUpdateRequestDto(
         String name,
         String email,
         Set<RoleType> roles
