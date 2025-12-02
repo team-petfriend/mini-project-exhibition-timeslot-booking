@@ -20,8 +20,8 @@ public class ReviewFile {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "review_id", nullable = false, foreignKey = @ForeignKey(name = "fk_review_files_reviews"))
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "review_id", nullable = true, foreignKey = @ForeignKey(name = "fk_review_files_reviews"))
     private Review review;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -31,8 +31,7 @@ public class ReviewFile {
     private Integer displayOrder;
 
     @Builder
-    public ReviewFile (Review review, FileInfo fileInfo, Integer displayOrder){
-        this.review = review;
+    public ReviewFile (FileInfo fileInfo, Integer displayOrder){
         this.fileInfo = fileInfo;
         this.displayOrder = displayOrder;
     }
