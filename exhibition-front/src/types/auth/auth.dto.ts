@@ -1,8 +1,11 @@
+export type AuthProvider = "LOCAL" | "GOOGLE" | "KAKAO" | "NAVER";
+
 export interface SignupRequest{
   name: string;
   loginId: string;
   password: string;
   email: string;
+  provider: AuthProvider;
 }
 
 export interface SignupResponse{
@@ -13,7 +16,7 @@ export interface SignupResponse{
 
 export interface LoginRequest {
   loginId: string;
-  pasword: string;
+  password: string;
 }
 
 export interface LoginResponse {

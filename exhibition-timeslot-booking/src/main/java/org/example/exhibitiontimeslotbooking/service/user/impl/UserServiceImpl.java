@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
-import org.example.exhibitiontimeslotbooking.dto.user.request.AdminUserUpdateRequest;
-import org.example.exhibitiontimeslotbooking.dto.user.request.UserMeUpdateRequest;
+import org.example.exhibitiontimeslotbooking.dto.user.request.AdminUserUpdateRequestDto;
+import org.example.exhibitiontimeslotbooking.dto.user.request.UserMeUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.user.response.MeResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.user.response.UserResponseDto;
 import org.example.exhibitiontimeslotbooking.entity.user.Role;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ResponseDto<UserResponseDto> updateMe(Long id, UserMeUpdateRequest request) {
+    public ResponseDto<UserResponseDto> updateMe(Long id, UserMeUpdateRequestDto request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ResponseDto<UserResponseDto> adminUpdateUser(Long userId, AdminUserUpdateRequest request) {
+    public ResponseDto<UserResponseDto> adminUpdateUser(Long userId, AdminUserUpdateRequestDto request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 

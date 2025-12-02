@@ -7,6 +7,6 @@ const REVIEW_PREFIX = `${BASE}/reviews`;
 
 export const REVIEW_PATH = {
   ROOT: `${EXHIBITIONS_PREFIX}`,
-  FILE: `${EXHIBITIONS_PREFIX}/files`,
+  REVIEW_FILES: `${EXHIBITIONS_PREFIX}/files`,
   BY_ID: ( reviewId: number ) => `${REVIEW_PREFIX}/${reviewId}`,
 }
