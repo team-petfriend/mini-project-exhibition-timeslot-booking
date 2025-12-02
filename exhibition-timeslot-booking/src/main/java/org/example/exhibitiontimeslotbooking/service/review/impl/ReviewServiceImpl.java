@@ -5,11 +5,14 @@ import org.example.exhibitiontimeslotbooking.dto.review.request.ReviewCreateRequ
 import org.example.exhibitiontimeslotbooking.dto.review.request.ReviewUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.review.response.ReviewResponseDto;
 import org.example.exhibitiontimeslotbooking.entity.exhibition.Exhibition;
+import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
+import org.example.exhibitiontimeslotbooking.entity.file.ReviewFile;
 import org.example.exhibitiontimeslotbooking.entity.review.Review;
 import org.example.exhibitiontimeslotbooking.entity.user.User;
 import org.example.exhibitiontimeslotbooking.repository.exhibition.ExhibitionRepository;
 import org.example.exhibitiontimeslotbooking.repository.review.ReviewRepository;
 import org.example.exhibitiontimeslotbooking.repository.user.UserRepository;
+import org.example.exhibitiontimeslotbooking.service.file.FileServiceImpl;
 import org.example.exhibitiontimeslotbooking.service.review.ReviewService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final ExhibitionRepository exhibitionRepository;
+    private final FileServiceImpl fileService;
 
     @Override
     public Page<ReviewResponseDto> getReviews(Long exhibitionId, Integer rating, Pageable pageable) {
@@ -40,11 +44,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewResponseDto createReview(Long exhibitionId, Long userId, ReviewCreateRequestDto request) {
+    public ReviewResponseDto createReviewWithFiles(Long exhibitionId, Long userId, ReviewCreateRequestDto request, List<MultipartFile> files) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        Exhibition exhibition = exhibitionRepository.findById(userId)
+        Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new RuntimeException("전시장을 찾을 수 없습니다."));
 
         if (reviewRepository.existsByExhibitionIdAndUserId(exhibitionId, userId)) {
@@ -54,23 +58,41 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = Review.builder()
                 .user(user)
                 .exhibition(exhibition)
-                .rating(request.rating())
-                .content(request.content())
+                .rating(request.getRating())
+                .content(request.getContent())
                 .build();
 
         review.validateRating();
 
         reviewRepository.save(review);
 
+        if (files != null && !files.isEmpty()) {
+            int order = 0;
+            for (MultipartFile file : files) {
+                FileInfo fileInfo = fileService.saveReviewImg(file);
+
+                ReviewFile reviewFile = ReviewFile.builder()
+                    .fileInfo(fileInfo)
+                    .displayOrder(order++)
+                    .build();
+
+            review.addReviewFile(reviewFile);
+            }
+            reviewRepository.save(review);
+        }
+
         return ReviewResponseDto.from(review);
     }
 
-
     @Override
     @Transactional
-    public ReviewResponseDto updateReview(Long reviewId, Long id, ReviewUpdateRequestDto request) {
+    public ReviewResponseDto updateReview(Long reviewId, Long userId, ReviewUpdateRequestDto request, boolean isAdmin) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("리뷰가 존재하지 않습니다."));
+
+        if(!isAdmin && !review.getUser().getId().equals(userId)) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
 
         if (request.rating() != null) {
             review.setRating(request.rating());
@@ -85,11 +107,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public void deleteReview(Long reviewId, Long userId, boolean admin) {
+    public void deleteReview(Long reviewId, Long userId, boolean idAdmin) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("리뷰가 존재하지 않습니다."));
 
-        if (!admin && !review.getUser().getId().equals(userId)) {
+        if (!idAdmin && !review.getUser().getId().equals(userId)) {
             throw new RuntimeException("권한이 없습니다.");
         }
 

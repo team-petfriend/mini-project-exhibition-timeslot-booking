@@ -12,9 +12,9 @@ import java.util.List;
 public interface ReviewService {
     Page<ReviewResponseDto> getReviews(Long exhibitionId, Integer rating, Pageable pageable);
 
-    ReviewResponseDto createReview(Long exhibitionId, Long id, ReviewCreateRequestDto request);
+    ReviewResponseDto createReviewWithFiles(Long exhibitionId, Long id, ReviewCreateRequestDto request, List<MultipartFile> files);
 
-    ReviewResponseDto updateReview(Long reviewId, Long id, ReviewUpdateRequestDto request);
+    ReviewResponseDto updateReview(Long reviewId, Long userId, ReviewUpdateRequestDto request, boolean isAdmin);
 
-    void deleteReview(Long reviewId, Long id, boolean admin);
+    void deleteReview(Long reviewId, Long id, boolean idAdmin);
 }

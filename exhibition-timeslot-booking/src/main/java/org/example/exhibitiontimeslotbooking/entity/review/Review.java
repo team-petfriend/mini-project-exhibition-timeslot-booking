@@ -40,7 +40,7 @@ public class Review {
     @Min(1) @Max(5)
     private Integer rating;
 
-    @Column(name = "content", updatable = false)
+    @Column(name = "content")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

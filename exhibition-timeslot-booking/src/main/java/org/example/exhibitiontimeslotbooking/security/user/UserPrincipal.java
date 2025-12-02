@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.example.exhibitiontimeslotbooking.common.enums.RoleType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -74,8 +75,15 @@ public class UserPrincipal implements UserDetails, OAuth2User, Serializable {
     @Override public boolean isCredentialsNonExpired() { return credentialsNonExpired; }
     @Override public boolean isEnabled() { return enabled; }
 
-    public boolean isAdmin() {
+    public List<String> getRolesWithoutPrefix() {
+        return this.getAuthorities().stream()
+                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .toList();
+    }
+
+    public boolean hasRole(RoleType roleType) {
+        String targetRole = roleType.name();
         return authorities.stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
+                .anyMatch(a -> a.getAuthority().replace("ROLE_", "").equals(targetRole));
     }
 }
