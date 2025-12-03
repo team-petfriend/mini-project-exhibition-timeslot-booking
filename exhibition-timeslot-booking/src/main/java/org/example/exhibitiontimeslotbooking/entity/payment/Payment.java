@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.exhibitiontimeslotbooking.common.enums.payment.PaymentMethod;
 import org.example.exhibitiontimeslotbooking.common.enums.payment.PaymentStatus;
 import org.example.exhibitiontimeslotbooking.common.enums.tickets.TicketStatus;
 import org.example.exhibitiontimeslotbooking.entity.base.BaseTimeEntity;
@@ -39,28 +40,29 @@ public class Payment extends BaseTimeEntity {
     @Column(name = "currency", nullable = false, length = 3)
     private String currency = "KRW";
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "method", nullable = false, length = 20)
-    private String method;
+    private PaymentMethod method;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private PaymentStatus paymentStatus = PaymentStatus.PAID;
 
     @CreationTimestamp
+    @Column(name = "paid_at", updatable = false)
     private LocalDateTime paidAt;
 
-    @Builder
-    public Payment (Booking bookingId, int amount, String currency, String method, PaymentStatus paymentStatus){
-        this.bookingId = bookingId;
-        this.amount = amount;
-        this.currency = currency;
-        this. method = method;
-        this.paymentStatus = (paymentStatus != null)? paymentStatus : PaymentStatus.PAID;
+
+    public void markPending() {
+        this.paymentStatus = PaymentStatus.PENDING;
     }
 
-    public void setPaymentStatus(PaymentStatus paymentStatus){
-        this.paymentStatus = paymentStatus;
+    public void markFailed() {
+        this.paymentStatus = PaymentStatus.FAILED;
     }
 
+    public void markRefunded() {
+        this.paymentStatus = PaymentStatus.REFUNDED;
+    }
 
 }
