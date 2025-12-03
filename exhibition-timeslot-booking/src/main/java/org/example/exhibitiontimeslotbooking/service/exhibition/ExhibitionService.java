@@ -1,5 +1,7 @@
 package org.example.exhibitiontimeslotbooking.service.exhibition;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsCreateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsStatusUpdateRequestDto;
@@ -19,9 +21,10 @@ public interface ExhibitionService {
 
     ResponseDto<ExhibitionDetailResponseDto> createExhibition(Long venueId, ExhibitionsCreateRequestDto request);
 
-    ResponseDto<List<ExhibitionSummaryDto>> getAllExhibition(Long venueId);
 
     ResponseDto<Void> deleteExhibition(Long venueId, Long exhibitionId);
 
     void autoUpdateExhibitionStatus();
+
+    ResponseDto<List<ExhibitionSummaryDto>> getAllExhibition(Long venueId, @Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
 }
