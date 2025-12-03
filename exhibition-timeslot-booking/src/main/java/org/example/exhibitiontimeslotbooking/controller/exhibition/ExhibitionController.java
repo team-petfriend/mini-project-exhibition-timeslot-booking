@@ -1,6 +1,8 @@
 package org.example.exhibitiontimeslotbooking.controller.exhibition;
 
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.constants.ApiMappingPattern;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
@@ -37,9 +39,12 @@ public class ExhibitionController {
     // 전시회 전체 조회
     @GetMapping
     public ResponseEntity<ResponseDto<List<ExhibitionSummaryDto>>> getAllExhibition (
-            @PathVariable Long venueId
-    ) {
-        ResponseDto<List<ExhibitionSummaryDto>> data = exhibitionService.getAllExhibition(venueId);
+            @PathVariable Long venueId,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
+            @RequestParam(required = false) String[] sort
+            ) {
+        ResponseDto<List<ExhibitionSummaryDto>> data = exhibitionService.getAllExhibition(venueId, page, size, sort);
 
         return ResponseEntity.ok(data);
     }

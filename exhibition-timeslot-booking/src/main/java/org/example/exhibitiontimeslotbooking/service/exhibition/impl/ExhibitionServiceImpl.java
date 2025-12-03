@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
 import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.CapacityPolicy;
 import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.ExhibitionStatus;
+import org.example.exhibitiontimeslotbooking.common.utils.pageable.PageableUtils;
+import org.example.exhibitiontimeslotbooking.common.utils.pageable.SortFields;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsCreateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsStatusUpdateRequestDto;
@@ -16,6 +18,8 @@ import org.example.exhibitiontimeslotbooking.exception.BusinessException;
 import org.example.exhibitiontimeslotbooking.repository.exhibition.ExhibitionRepository;
 import org.example.exhibitiontimeslotbooking.repository.venue.VenueRepository;
 import org.example.exhibitiontimeslotbooking.service.exhibition.ExhibitionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,24 +60,23 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         return ResponseDto.success("전시회가 생성되었습니다.", data);
     }
 
+
     @Override
-    @PreAuthorize("permitAll()")
-    public ResponseDto<List<ExhibitionSummaryDto>> getAllExhibition(Long venueId) {
+    public ResponseDto<List<ExhibitionSummaryDto>> getAllExhibition(Long venueId, int page, int size, String[] sort) {
 
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
 
+        Pageable exbitionpageable = PageableUtils.buildPageable(page, size, sort, SortFields.EXHIBITION_SORTS);
 
-        List<Exhibition> exhibitions = exhibitionRepository.findAll();
+        Page<Exhibition> dtoPage = exhibitionRepository.findAll(exbitionpageable);
 
-        List<ExhibitionSummaryDto> data = exhibitions.stream()
+        List<ExhibitionSummaryDto> data = dtoPage.getContent().stream()
                 .map(ExhibitionSummaryDto::from)
                 .toList();
 
-
-        return ResponseDto.success("전시회장이 전체 조회되었습니다.", data);
+        return ResponseDto.success("전시회가 전체조회되었습니다.", data);
     }
-
 
     @Override
     @PreAuthorize("permitAll()")
