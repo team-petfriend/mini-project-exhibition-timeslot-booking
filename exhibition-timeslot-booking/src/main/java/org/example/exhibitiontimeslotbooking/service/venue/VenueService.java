@@ -3,7 +3,9 @@ package org.example.exhibitiontimeslotbooking.service.venue;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
+import org.example.exhibitiontimeslotbooking.dto.page.response.PageResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesCreateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.response.VenueDetailResponseDto;
@@ -22,4 +24,6 @@ public interface VenueService {
     ResponseDto<Void> deleteVenue(Long venueId);
 
     ResponseDto<List<VenueSummaryDto>> getAllVenues(@Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
+
+    ResponseDto<PageResponseDto<VenueSummaryDto>> searchVenuesByName(@NotBlank(message = "검색 키워드는 비워질 수 없습니다.") String keyword, @Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
 }
