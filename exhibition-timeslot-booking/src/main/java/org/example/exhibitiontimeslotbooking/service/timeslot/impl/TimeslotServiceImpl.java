@@ -208,7 +208,7 @@ public class TimeslotServiceImpl implements TimeslotService {
 
         for (Timeslot ts : timeslots ) {
             if (ts.getSlotsStatus() == SlotStatus.CANCELED) {
-                throw new BusinessException(ErrorCode.TIMESLOT_ALREADY_CANCELED);
+                continue;
             }
 
            if (ts.getStartTime().isAfter(now) || ts.getEndTime().isBefore(now)) {

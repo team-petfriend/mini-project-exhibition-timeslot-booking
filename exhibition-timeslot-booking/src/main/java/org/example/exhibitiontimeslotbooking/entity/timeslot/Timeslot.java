@@ -2,6 +2,7 @@ package org.example.exhibitiontimeslotbooking.entity.timeslot;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class Timeslot extends BaseTimeEntity {
     private LocalDateTime endTime;
 
     @Column(nullable = false)
+    @Min(value = 1, message = "최소인원은 1명부터 입니다.")
     private int capacity;
 
     @Column(nullable = false)

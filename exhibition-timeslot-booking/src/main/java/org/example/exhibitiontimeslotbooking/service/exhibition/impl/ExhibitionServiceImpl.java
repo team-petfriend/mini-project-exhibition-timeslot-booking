@@ -16,13 +16,11 @@ import org.example.exhibitiontimeslotbooking.exception.BusinessException;
 import org.example.exhibitiontimeslotbooking.repository.exhibition.ExhibitionRepository;
 import org.example.exhibitiontimeslotbooking.repository.venue.VenueRepository;
 import org.example.exhibitiontimeslotbooking.service.exhibition.ExhibitionService;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -175,7 +173,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         for (Exhibition es : exhibitions) {
 
             if (es.getExhibitionStatus() == ExhibitionStatus.CANCELED) {
-                throw new BusinessException(ErrorCode.EXHIBITION_ALREADY_CANCELED);
+                continue;
             }
 
             if (es.getStartDate().isAfter(today)) {
