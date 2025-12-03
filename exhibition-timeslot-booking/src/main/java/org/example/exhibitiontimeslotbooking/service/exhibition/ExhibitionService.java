@@ -8,6 +8,7 @@ import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.Exhibitions
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.response.ExhibitionDetailResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.response.ExhibitionSummaryDto;
+import org.example.exhibitiontimeslotbooking.dto.page.response.PageResponseDto;
 
 import java.util.List;
 
@@ -26,5 +27,5 @@ public interface ExhibitionService {
 
     void autoUpdateExhibitionStatus();
 
-    ResponseDto<List<ExhibitionSummaryDto>> getAllExhibition(Long venueId, @Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
+    ResponseDto<PageResponseDto<ExhibitionSummaryDto>> getAllExhibition(Long venueId, @Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
 }

@@ -48,16 +48,23 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
-    public ResponseDto<List<VenueSummaryDto>> getAllVenues(int page, int size, String[] sort) {
+    public ResponseDto<PageResponseDto<VenueSummaryDto>> getAllVenues(int page, int size, String[] sort) {
         Pageable venuePage = PageableUtils.buildPageable(page, size, sort, SortFields.VENUE_SORT);
 
         Page<Venue> pageResult = venueRepository.findAll(venuePage);
 
-        List<VenueSummaryDto> dtoPage = pageResult.getContent().stream()
+        List<VenueSummaryDto> venusList = pageResult.getContent().stream()
                 .map(VenueSummaryDto::from)
                 .toList();
 
-        return ResponseDto.success("전체 조회를 성공했습니다.", dtoPage);
+        PageResponseDto<VenueSummaryDto> data = PageResponseDto.<VenueSummaryDto>builder()
+                .content(venusList)
+                .currentPage(pageResult.getNumber())
+                .totalPages(pageResult.getTotalPages())
+                .totalElements(pageResult.getTotalElements())
+                .build();
+
+        return ResponseDto.success("전체 조회를 성공했습니다.", data);
     }
 
     // 조회

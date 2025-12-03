@@ -15,15 +15,9 @@ import java.util.List;
 
 public interface VenueService {
     ResponseDto<VenueDetailResponseDto> createVenue(@Valid VenuesCreateRequestDto request);
-
-
     ResponseDto<VenueDetailResponseDto> getByIdVenue(Long venueId);
-
     ResponseDto<VenueDetailResponseDto> updateVenue(Long venueId, VenuesUpdateRequestDto request);
-
     ResponseDto<Void> deleteVenue(Long venueId);
-
-    ResponseDto<List<VenueSummaryDto>> getAllVenues(@Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
-
     ResponseDto<PageResponseDto<VenueSummaryDto>> searchVenuesByName(@NotBlank(message = "검색 키워드는 비워질 수 없습니다.") String keyword, @Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
+    ResponseDto<PageResponseDto<VenueSummaryDto>> getAllVenues(@Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
 }

@@ -11,6 +11,7 @@ import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.Exhibitions
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.response.ExhibitionDetailResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.response.ExhibitionSummaryDto;
+import org.example.exhibitiontimeslotbooking.dto.page.response.PageResponseDto;
 import org.example.exhibitiontimeslotbooking.service.exhibition.ExhibitionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,13 +39,13 @@ public class ExhibitionController {
 
     // 전시회 전체 조회
     @GetMapping
-    public ResponseEntity<ResponseDto<List<ExhibitionSummaryDto>>> getAllExhibition (
+    public ResponseEntity<ResponseDto<PageResponseDto<ExhibitionSummaryDto>>> getAllExhibition (
             @PathVariable Long venueId,
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
             @RequestParam(required = false) String[] sort
             ) {
-        ResponseDto<List<ExhibitionSummaryDto>> data = exhibitionService.getAllExhibition(venueId, page, size, sort);
+        ResponseDto<PageResponseDto<ExhibitionSummaryDto>> data = exhibitionService.getAllExhibition(venueId, page, size, sort);
 
         return ResponseEntity.ok(data);
     }

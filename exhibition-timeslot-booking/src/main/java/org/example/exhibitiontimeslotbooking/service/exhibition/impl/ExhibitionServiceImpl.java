@@ -12,6 +12,7 @@ import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.Exhibitions
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.response.ExhibitionDetailResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.response.ExhibitionSummaryDto;
+import org.example.exhibitiontimeslotbooking.dto.page.response.PageResponseDto;
 import org.example.exhibitiontimeslotbooking.entity.exhibition.Exhibition;
 import org.example.exhibitiontimeslotbooking.entity.venue.Venue;
 import org.example.exhibitiontimeslotbooking.exception.BusinessException;
@@ -62,18 +63,25 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
 
     @Override
-    public ResponseDto<List<ExhibitionSummaryDto>> getAllExhibition(Long venueId, int page, int size, String[] sort) {
+    public ResponseDto<PageResponseDto<ExhibitionSummaryDto>> getAllExhibition(Long venueId, int page, int size, String[] sort) {
 
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
 
-        Pageable exbitionpageable = PageableUtils.buildPageable(page, size, sort, SortFields.EXHIBITION_SORTS);
+        Pageable pageable = PageableUtils.buildPageable(page, size, sort, SortFields.EXHIBITION_SORTS);
 
-        Page<Exhibition> dtoPage = exhibitionRepository.findAll(exbitionpageable);
+        Page<Exhibition> exhibitionPage = exhibitionRepository.findAll(pageable);
 
-        List<ExhibitionSummaryDto> data = dtoPage.getContent().stream()
+        List<ExhibitionSummaryDto> PageList = exhibitionPage.getContent().stream()
                 .map(ExhibitionSummaryDto::from)
                 .toList();
+
+        PageResponseDto<ExhibitionSummaryDto> data = PageResponseDto.<ExhibitionSummaryDto>builder()
+                .content(PageList)
+                .currentPage(exhibitionPage.getNumber())
+                .totalPages(exhibitionPage.getTotalPages())
+                .totalElements(exhibitionPage.getTotalElements())
+                .build();
 
         return ResponseDto.success("전시회가 전체조회되었습니다.", data);
     }
