@@ -4,9 +4,11 @@ package org.example.exhibitiontimeslotbooking.controller.venue;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.constants.ApiMappingPattern;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
+import org.example.exhibitiontimeslotbooking.dto.page.response.PageResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesCreateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.response.VenueDetailResponseDto;
@@ -86,4 +88,16 @@ public class VenueController {
         return ResponseEntity.ok(data);
     }
 
+    // 전시장 검색
+    @GetMapping(ApiMappingPattern.Venues.SEARCH)
+    public ResponseEntity<ResponseDto<PageResponseDto<VenueSummaryDto>>> searchVenuesByName(
+        @RequestParam("keyword") @NotBlank(message = "검색 키워드는 비워질 수 없습니다.") String keyword,
+        @RequestParam(defaultValue = "0") @Min(0) int page,
+        @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
+        @RequestParam(required = false) String[] sort
+    ) {
+        ResponseDto<PageResponseDto<VenueSummaryDto>> data = venueService.searchVenuesByName(keyword, page, size, sort);
+
+        return ResponseEntity.ok(data);
+    }
 }

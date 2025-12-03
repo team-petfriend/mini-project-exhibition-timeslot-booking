@@ -95,6 +95,4 @@ public class ExhibitionController {
         return ResponseEntity.ok(data);
     }
 
-
-
 }

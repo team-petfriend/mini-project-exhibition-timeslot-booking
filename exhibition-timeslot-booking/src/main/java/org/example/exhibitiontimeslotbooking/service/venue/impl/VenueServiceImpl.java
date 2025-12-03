@@ -5,6 +5,7 @@ import org.example.exhibitiontimeslotbooking.common.enums.errors.ErrorCode;
 import org.example.exhibitiontimeslotbooking.common.utils.pageable.PageableUtils;
 import org.example.exhibitiontimeslotbooking.common.utils.pageable.SortFields;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
+import org.example.exhibitiontimeslotbooking.dto.page.response.PageResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesCreateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.request.VenuesUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.venues.response.VenueDetailResponseDto;
@@ -107,5 +108,26 @@ public class VenueServiceImpl implements VenueService {
         venueRepository.delete(venue);
 
         return ResponseDto.success("전시장이 삭제되었습니다.", null);
+    }
+
+    // 검색어
+    @Override
+    public ResponseDto<PageResponseDto<VenueSummaryDto>> searchVenuesByName(String keyword, int page, int size, String[] sort) {
+        Pageable venuePage = PageableUtils.buildPageable(page, size, sort, SortFields.VENUE_SORT);
+
+        Page<Venue> pageResult = venueRepository.searchVenuesByName(keyword, venuePage);
+
+        List<VenueSummaryDto> venueList = pageResult.getContent().stream()
+                .map(VenueSummaryDto::from)
+                .toList();
+
+        PageResponseDto<VenueSummaryDto> data = PageResponseDto.<VenueSummaryDto>builder()
+                .content(venueList)
+                .currentPage(pageResult.getNumber())
+                .totalPages(pageResult.getTotalPages())
+                .totalElements(pageResult.getTotalElements())
+                .build();
+
+        return ResponseDto.success("검색어를 찾았습니다.", data);
     }
 }
