@@ -2,6 +2,8 @@ package org.example.exhibitiontimeslotbooking.controller.venue;
 
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.constants.ApiMappingPattern;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
@@ -37,8 +39,12 @@ public class VenueController {
 
     // 전체조회
     @GetMapping
-    public ResponseEntity<ResponseDto<List<VenueSummaryDto>>> getAllVenues() {
-        ResponseDto<List<VenueSummaryDto>> data = venueService.getAllVenues();
+    public ResponseEntity<ResponseDto<List<VenueSummaryDto>>> getAllVenues(
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
+            @RequestParam(required = false) String[] sort
+    ) {
+        ResponseDto<List<VenueSummaryDto>> data = venueService.getAllVenues(page, size, sort);
 
         return ResponseEntity.ok(data);
     }
