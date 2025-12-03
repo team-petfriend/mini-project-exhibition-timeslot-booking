@@ -41,12 +41,12 @@ public class VenueController {
 
     // 전체조회
     @GetMapping
-    public ResponseEntity<ResponseDto<List<VenueSummaryDto>>> getAllVenues(
+    public ResponseEntity<ResponseDto<PageResponseDto<VenueSummaryDto>>> getAllVenues(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
             @RequestParam(required = false) String[] sort
     ) {
-        ResponseDto<List<VenueSummaryDto>> data = venueService.getAllVenues(page, size, sort);
+        ResponseDto<PageResponseDto<VenueSummaryDto>> data = venueService.getAllVenues(page, size, sort);
 
         return ResponseEntity.ok(data);
     }
