@@ -36,7 +36,7 @@ public class ExhibitionFileServiceImpl implements ExhibitionFileService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN', 'STAFF')")
     public ResponseDto<Void> uploadExhibitionFiles(Long exhibitionId, List<MultipartFile> files) {
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
@@ -69,7 +69,7 @@ public class ExhibitionFileServiceImpl implements ExhibitionFileService {
 
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("permitAll()")
     public ResponseDto<List<ExhibitionFileResponseDto>> getByIdExhibitionFiles(Long exhibitionId) {
 
         List<ExhibitionFile> exhibitionFiles = exhibitionFileRepository.findByExhibitionIdOrderByDisplayOrderAsc(exhibitionId);

@@ -62,6 +62,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     }
     
     @Override
+    @PreAuthorize("permitAll()")
     public ResponseDto<PageResponseDto<ExhibitionSummaryDto>> getAllExhibition(Long venueId, int page, int size, String[] sort) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -118,7 +119,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseDto<ExhibitionDetailResponseDto> updateExhibition(Long venueId, Long exhibitionId, ExhibitionsUpdateRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -173,6 +174,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public ResponseDto<PageResponseDto<ExhibitionSummaryDto>> searchExhibition(Long venueId, String keyword, int page, int size, String[] sort) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -201,7 +203,6 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     @Override
     @Transactional
     public void autoUpdateExhibitionStatus() {
-
         List<Exhibition> exhibitions = exhibitionRepository.findAll();
 
         LocalDate today = LocalDate.now();
