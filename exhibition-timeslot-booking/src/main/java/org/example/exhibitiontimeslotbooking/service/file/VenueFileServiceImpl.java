@@ -15,14 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class VenueFileServiceImpl {
-
     private final FileInfoRepository fileInfoRepository;
     private final VenueRepository venueRepository;
     private final FileServiceImpl fileService;
 
     // 파일 생성
     @Transactional
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseDto<FileInfo>  updateVenueFile(Long venueId, MultipartFile file) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -44,6 +43,4 @@ public class VenueFileServiceImpl {
 
         return ResponseDto.success("전시장 파일을 업로드했습니다.", null);
     }
-
-    // 파일 삭제 구현
 }

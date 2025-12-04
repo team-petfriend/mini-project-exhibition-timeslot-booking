@@ -133,6 +133,31 @@ public class WebSecurityConfig {
                                     "/favicon.ico",
                                     "/error").permitAll()
 
+                            // Venus
+                            .requestMatchers(HttpMethod.POST, "/api/v1/venues").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/venues/**").permitAll()
+                            .requestMatchers(HttpMethod.PUT, "/api/v1/venues/**").hasAnyRole("ADMIN", "STAFF")
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/venues/**").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.POST, "/api/v1/venues/*/file").hasAnyRole("ADMIN", "STAFF")
+
+                            // Exhibition
+                            .requestMatchers(HttpMethod.POST, "/api/v1/venues/*/exhibitions").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/venues/*/exhibitions/**").permitAll()
+                            .requestMatchers(HttpMethod.PUT, "/api/v1/venues/*/exhibitions/**").hasAnyRole("ADMIN", "STAFF")
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/venues/*/exhibitions/**").hasRole("ADMIN")
+
+                            // Exhibition Files
+                            .requestMatchers(HttpMethod.POST, "/api/v1/venues/*/exhibitions/*/files").hasAnyRole("ADMIN", "STAFF")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/venues/*/exhibitions/*/files/**").permitAll()
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/venues/*/exhibitions/*/files/**").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.PUT, "/api/v1/venues/*/exhibitions/*/files/**").hasRole("ADMIN")
+
+                            // timeslot
+                            .requestMatchers(HttpMethod.POST, "/api/v1/venues/*/exhibitions/*/slots").hasAnyRole("ADMIN", "STAFF")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/venues/*/exhibitions/*/slots/**").hasAnyRole("ADMIN", "STAFF", "USER")
+                            .requestMatchers(HttpMethod.PUT, "/api/v1/venues/*/exhibitions/*/slots/**").hasAnyRole("ADMIN", "STAFF")
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/venues/*/exhibitions/*/slots/**").hasRole("ADMIN")
+
 
                             // 인증된 사용자만 사용 가능 (인가, 권한 X)
                             // : HttpMethod는 선택값, URL 경로는 필수

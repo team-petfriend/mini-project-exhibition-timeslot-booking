@@ -79,7 +79,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
     public ResponseDto<List<TimeslotDetailResponseDto>> getAllTimeslot(Long venueId, Long exhibitionId) {
 
         Venue venue = venueRepository.findById(venueId)
@@ -98,7 +98,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
     public ResponseDto<TimeslotDetailResponseDto> getByIdTimeslot(Long venueId, Long exhibitionId, Long timeslotId) {
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
@@ -147,7 +147,7 @@ public class TimeslotServiceImpl implements TimeslotService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDto<Void> deleteTimeslot(Long venueId, Long exhibitionId, Long timeslotId) {
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
