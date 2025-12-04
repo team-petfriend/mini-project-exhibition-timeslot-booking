@@ -1,7 +1,7 @@
 export type TIMESLOTSTATUS = 'OPEN' | 'CLOSED' | 'CANCELED';
 
 // 타임 슬롯 생성
-export interface TimeslotDetailResponse {
+export interface TimeslotDetailResponseDto {
   venueId: number;
   exhibitionId: number;
   startTime: string;
@@ -10,7 +10,7 @@ export interface TimeslotDetailResponse {
   status: TIMESLOTSTATUS;
 }
 
-export interface TimeslotCreateRequest {
+export interface TimeslotCreateRequestDto {
   venueId: number;
   exhibitionId: number;
   startTime: string;
@@ -20,8 +20,9 @@ export interface TimeslotCreateRequest {
 }
 
 // 타임 슬롯 상태변경
-export interface TimeslotStatusChangeRequest {
+export interface TimeslotStatusChangeRequestDto {
   venueId: number;
   exhibitionId: number;
+  fileId: number;
   status?: TIMESLOTSTATUS;
 }
