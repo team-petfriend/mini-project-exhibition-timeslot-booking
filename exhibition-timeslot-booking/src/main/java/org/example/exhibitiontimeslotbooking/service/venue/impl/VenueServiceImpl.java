@@ -133,6 +133,8 @@ public class VenueServiceImpl implements VenueService {
                 .currentPage(pageResult.getNumber())
                 .totalPages(pageResult.getTotalPages())
                 .totalElements(pageResult.getTotalElements())
+                .first(pageResult.isFirst())
+                .last(pageResult.isLast())
                 .build();
 
         return ResponseDto.success("검색어를 찾았습니다.", data);

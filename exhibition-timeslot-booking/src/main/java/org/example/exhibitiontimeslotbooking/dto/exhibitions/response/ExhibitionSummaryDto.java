@@ -2,7 +2,6 @@ package org.example.exhibitiontimeslotbooking.dto.exhibitions.response;
 
 import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.CapacityPolicy;
 import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.ExhibitionStatus;
-import org.example.exhibitiontimeslotbooking.dto.exbitions_file.response.ExhibitionFileResponseDto;
 import org.example.exhibitiontimeslotbooking.entity.exhibition.Exhibition;
 import org.example.exhibitiontimeslotbooking.entity.file.ExhibitionFile;
 
@@ -10,7 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public record ExhibitionSummaryDto(
         Long id,

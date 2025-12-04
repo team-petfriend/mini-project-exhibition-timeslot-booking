@@ -3,6 +3,8 @@ package org.example.exhibitiontimeslotbooking.controller.exhibition;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.example.exhibitiontimeslotbooking.common.constants.ApiMappingPattern;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
@@ -96,4 +98,16 @@ public class ExhibitionController {
         return ResponseEntity.ok(data);
     }
 
+    @GetMapping(ApiMappingPattern.Exhibitions.SEARCH)
+    public ResponseEntity<ResponseDto<PageResponseDto<ExhibitionSummaryDto>>> searchExhibition(
+            @PathVariable Long venueId,
+            @RequestParam("keyword") @NotBlank(message = "검색 키워드는 비워질 수 없습니다.") String keyword,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
+            @RequestParam(required = false) String[] sort
+    ) {
+        ResponseDto<PageResponseDto<ExhibitionSummaryDto>> data = exhibitionService.searchExhibition(venueId, keyword, page, size, sort);
+
+        return ResponseEntity.ok(data);
+    }
 }
