@@ -2,6 +2,7 @@ package org.example.exhibitiontimeslotbooking.service.exhibition;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsCreateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsStatusUpdateRequestDto;
@@ -28,4 +29,6 @@ public interface ExhibitionService {
     void autoUpdateExhibitionStatus();
 
     ResponseDto<PageResponseDto<ExhibitionSummaryDto>> getAllExhibition(Long venueId, @Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
+
+    ResponseDto<PageResponseDto<ExhibitionSummaryDto>> searchExhibition(Long venueId, @NotBlank(message = "검색 키워드는 비워질 수 없습니다.") String keyword, @Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
 }

@@ -60,8 +60,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
         return ResponseDto.success("전시회가 생성되었습니다.", data);
     }
-
-
+    
     @Override
     public ResponseDto<PageResponseDto<ExhibitionSummaryDto>> getAllExhibition(Long venueId, int page, int size, String[] sort) {
 
@@ -171,6 +170,32 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         exhibitionRepository.flush();
 
         return ResponseDto.success("전시회장 상태가 변경되었습니다.", data);
+    }
+
+    @Override
+    public ResponseDto<PageResponseDto<ExhibitionSummaryDto>> searchExhibition(Long venueId, String keyword, int page, int size, String[] sort) {
+
+        Venue venue = venueRepository.findById(venueId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
+
+        Pageable pageable = PageableUtils.buildPageable(page, size, sort, SortFields.EXHIBITION_SORTS);
+
+        Page<Exhibition> pageResult = exhibitionRepository.searchExhibitionByKeyword(venue.getId(), keyword, pageable);
+
+        List<ExhibitionSummaryDto> content = pageResult.getContent().stream()
+                .map(ExhibitionSummaryDto::from)
+                .toList();
+
+        PageResponseDto<ExhibitionSummaryDto> data = PageResponseDto.<ExhibitionSummaryDto>builder()
+                .content(content)
+                .currentPage(pageResult.getNumber())
+                .totalPages(pageResult.getTotalPages())
+                .totalElements(pageResult.getTotalElements())
+                .first(pageResult.isFirst())
+                .last(pageResult.isLast())
+                .build();
+
+        return ResponseDto.success("검색어를 찾았습니다.", data);
     }
 
     @Override
