@@ -1,5 +1,5 @@
 // 전체 조회
-export interface VenuesListDto {
+export interface VenueSummaryDto {
   venueId: number;
   name: string;
 	address:string;
@@ -7,20 +7,22 @@ export interface VenuesListDto {
 }
 
 // 전제 조회 배열 반환 
-export type VenuesListResponse = VenuesListDto[];
+export type VenueListResponseDto = VenueSummaryDto[];
 
 // 단건 조회
-export interface VenuesDetailResponse {
-  venueId: number;
+export interface VenueDetailResponseDto {
+  id: number;
   name: string;
   address?:string;
-  imgUrl: string;
+  venueImgURL: string;
   latitude?: number;
   longitude?: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // 생성
-export interface VenuesCreateRequest {
+export interface VenuesCreateRequestDto {
   name: string;
   address?: string;
   latitude?:  number;
@@ -28,8 +30,8 @@ export interface VenuesCreateRequest {
 }
 
 // 수정
-export interface VenuesUpdateRequest {
-  venueId: number;  
+export interface VenuesUpdateRequestDto {
+  id: number;  
   name?: string;
   address?: string;
   latitude?: number;
@@ -40,12 +42,5 @@ export interface VenuesUpdateRequest {
 export interface VenuesFileCreateRequest {
   venueId: number;
   File: File;
-}
-
-// 파일 수정
-export interface VenuesFileUpdateRequest {
-  venueId: number;
-  fileId: number;
-  newFile?: File;
 }
 

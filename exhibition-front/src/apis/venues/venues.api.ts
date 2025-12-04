@@ -1,13 +1,15 @@
-import type { VenuesCreateRequest, VenuesDetailResponse, VenuesListResponse, VenuesUpdateRequest } from "@/types/venues/venues.type";
+import type { VenuesCreateRequestDto, VenueDetailResponseDto, VenuesUpdateRequestDto, VenueSummaryDto } from "@/types/venues/venues.type";
 import { publicApi } from "../common/axiosInstance";
 import type { ResponseDto } from "@/types/common/ResponseDto";
 import { VENUES_PATH } from "./venues.path";
 import { VENUES_FILE_PATH } from "./venues.file";
+import type { PageResponseDto } from "@/types/common/utils/pageable/PageResponseDto";
+import type { VenueSort } from "@/types/common/utils/pageable/SortFields";
 
 export const venueApi = {
   // 생성
-  createdVenue: async (req: VenuesCreateRequest): Promise<VenuesDetailResponse> => {
-    const res = await publicApi.post<ResponseDto<VenuesDetailResponse>> (
+  createVenue: async (req: VenuesCreateRequestDto): Promise<VenueDetailResponseDto> => {
+    const res = await publicApi.post<ResponseDto<VenueDetailResponseDto>> (
       VENUES_PATH.CREATE,
       req,
     );
@@ -18,9 +20,12 @@ export const venueApi = {
   },
 
   // 전체 조회
-  getAllVenue: async (): Promise<VenuesListResponse> => {
-    const res = await publicApi.get<ResponseDto<VenuesListResponse>> (
+  getAllVenues: async (page:number, size:number, sort: VenueSort[]): Promise<PageResponseDto<VenueSummaryDto>> => {
+    const res = await publicApi.get<ResponseDto<PageResponseDto<VenueSummaryDto>>> (
       VENUES_PATH.LIST,
+    {
+      params: { page, size, sort},
+    }  
     );
     if ( !res.data.data ) {
       throw new Error("venue 데이터를 불러오지 못해 정보를 들고 오는데 실패했습니다.")
@@ -29,9 +34,9 @@ export const venueApi = {
   },
 
   // 단건 조회
-  getByIdVenue: async (venueId: number): Promise<VenuesDetailResponse> => {
-    const res = await publicApi.get<ResponseDto<VenuesDetailResponse>> (
-      VENUES_PATH.VENUES_BY_ID(venueId),
+  getByIdVenue: async (id: number): Promise<VenueDetailResponseDto> => {
+    const res = await publicApi.get<ResponseDto<VenueDetailResponseDto>> (
+      VENUES_PATH.VENUES_BY_ID(id),
     );
     if ( !res.data.data ) {
       throw new Error("venue 데이터를 불러오지 못해 정보를 들고 오는데 실패했습니다.")
@@ -40,9 +45,9 @@ export const venueApi = {
   },
 
   // 수정 
-  updatedVenue: async (venueId: number, req: VenuesUpdateRequest): Promise<VenuesDetailResponse> => {
-    const res = await publicApi.put<ResponseDto<VenuesDetailResponse>> (
-      VENUES_PATH.VENUES_BY_ID(venueId),
+  updateVenue: async (id: number, req: VenuesUpdateRequestDto): Promise<VenueDetailResponseDto> => {
+    const res = await publicApi.put<ResponseDto<VenueDetailResponseDto>> (
+      VENUES_PATH.VENUES_BY_ID(id),
       req,
     );
     if ( !res.data.data ) {
@@ -52,47 +57,27 @@ export const venueApi = {
   },
 
   // 삭제
-  deletedVenue: async (venueId: number) : Promise<void> => {
+  deleteVenue: async (id: number) : Promise<void> => {
     const res = await publicApi.delete<ResponseDto<void>> (
-      VENUES_PATH.VENUES_BY_ID(venueId),
+      VENUES_PATH.VENUES_BY_ID(id),
     );
     if ( !res.data) {
       throw new Error("venue 데이터를 불러오지 못해 삭제에 실패했습니다.")
     }
   },
 
+  searchVenuesByName: async (keyword: string, page:number, size: number, sort: VenueSort[]): Promise<PageResponseDto<VenueSummaryDto>> => {
+    const res = await publicApi.get<ResponseDto<PageResponseDto<VenueSummaryDto>>>
+  }
+
   // venue 파일 생성
-  uploadFile: async (venueId: number, formData: FormData ) : Promise<void> => {
+  uploadFile: async (id: number, formData: FormData ) : Promise<void> => {
     const res = await publicApi.post<ResponseDto<void>> (
-      VENUES_FILE_PATH.VENUE_CREATE_FILE(venueId),
+      VENUES_FILE_PATH.VENUE_CREATE_FILE(id),
       formData
     );
     if( !res.data ) {
       throw new Error("file 생성에 실패했습니다.")
     }
-  },
-
-  // 파일 수정
-  updatedFile: async (venueId: number, fileId: number, formData: FormData) : Promise<void> =>
-  {
-    const res = await publicApi.put<ResponseDto<void>> (
-      VENUES_FILE_PATH.VENUE_FILE_ID(venueId, fileId),
-      formData
-    );
-    if (!res.data) {
-      throw new Error("파일 수정에 실패했습니다.");
-    }
-  },
-
-  // 파일 삭제
-  deletedFile: async (venueId: number, fileId: number) : Promise<void> =>
-  {
-    const res = await publicApi.delete<ResponseDto<void>> (
-      VENUES_FILE_PATH.VENUE_FILE_ID(venueId, fileId),
-    );
-    if (!res.data) {
-      throw new Error("파일 수정에 실패했습니다.");
-    }
   }
-
 }

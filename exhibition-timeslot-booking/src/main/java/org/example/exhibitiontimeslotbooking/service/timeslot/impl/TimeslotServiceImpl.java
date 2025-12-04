@@ -99,14 +99,14 @@ public class TimeslotServiceImpl implements TimeslotService {
 
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
-    public ResponseDto<TimeslotDetailResponseDto> getByIdTimeslot(Long venueId, Long exhibitionId, Long timeslotId) {
+    public ResponseDto<TimeslotDetailResponseDto> getByIdTimeslot(Long venueId, Long exhibitionId, Long slotId) {
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
 
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
 
-        Timeslot timeslot = timeslotRepository.findById(timeslotId)
+        Timeslot timeslot = timeslotRepository.findById(slotId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TIMESLOT_NOT_FOUND));
 
         TimeslotDetailResponseDto data = TimeslotDetailResponseDto.from(timeslot);
@@ -117,7 +117,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
-    public ResponseDto<TimeslotDetailResponseDto> updateTimeslot(Long venueId, Long exhibitionId, Long timeslotId, TimeslotUpdateRequestDto request) {
+    public ResponseDto<TimeslotDetailResponseDto> updateTimeslot(Long venueId, Long exhibitionId, Long slotId, TimeslotUpdateRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
@@ -125,7 +125,7 @@ public class TimeslotServiceImpl implements TimeslotService {
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
 
-        Timeslot timeslot = timeslotRepository.findById(timeslotId)
+        Timeslot timeslot = timeslotRepository.findById(slotId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TIMESLOT_NOT_FOUND));
 
         if (timeslot.getSlotsStatus() == SlotStatus.CANCELED) {
@@ -148,17 +148,17 @@ public class TimeslotServiceImpl implements TimeslotService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDto<Void> deleteTimeslot(Long venueId, Long exhibitionId, Long timeslotId) {
+    public ResponseDto<Void> deleteTimeslot(Long venueId, Long exhibitionId, Long slotId) {
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
 
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
 
-        Timeslot timeslot = timeslotRepository.findById(timeslotId)
+        Timeslot timeslot = timeslotRepository.findById(slotId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TIMESLOT_NOT_FOUND));
 
-         timeslotRepository.deleteById(timeslotId);
+         timeslotRepository.deleteById(slotId);
 
         return ResponseDto.success("타임슬롯이 삭제되었습니다.", null);
     }
@@ -166,7 +166,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
-    public ResponseDto<TimeslotDetailResponseDto> changeTimeslot(Long venueId, Long exhibitionId, Long timeslotId, TimeslotStatusChangeRequestDto request) {
+    public ResponseDto<TimeslotDetailResponseDto> changeTimeslot(Long venueId, Long exhibitionId, Long slotId, TimeslotStatusChangeRequestDto request) {
 
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
@@ -174,7 +174,7 @@ public class TimeslotServiceImpl implements TimeslotService {
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.EXHIBITION_NOT_FOUND));
 
-        Timeslot timeslot = timeslotRepository.findById(timeslotId)
+        Timeslot timeslot = timeslotRepository.findById(slotId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TIMESLOT_NOT_FOUND));
 
         LocalDateTime today = LocalDateTime.now();
