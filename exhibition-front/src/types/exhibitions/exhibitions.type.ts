@@ -1,35 +1,8 @@
-export type STATUS = "SCHEDULED" | "OPEN" | "CLOSED" | "CANCELED";
+import type { ExhibitionSort } from "../common/utils/pageable/SortFields";
 
-export type CAPACITYPOLICY = "PER_DAY" | "PER_SLOT";
+export type ExhibitionStatus = "SCHEDULED" | "OPEN" | "CLOSED" | "CANCELED";
 
-// 전시회 전체 조회
-export interface ExhibitionSummaryDto {
-  venueId : number;
-  id: number;
-  title : string;
-  description : string;
-  startDate: string;
-  endDate: string;
-  status: STATUS;
-  capacityPolicy : CAPACITYPOLICY;
-  exhibitionImgURL:  string[];
-}
-
-// 전시회 단건 조회
-export interface ExhibitionDetailResponseDto {
-  venueId : number;
-  id: number;
-  title: string;
-  description : string;
-  startDate: string;
-  endDate : string;
-  status: STATUS;
-  capacityPolicy : CAPACITYPOLICY;
-  createdAt : string;
-  updatedAt : string;
-  exhibitionImgURL:  string[];
-  timeslots: string[];
-}
+export type CapacityPolicy = "PER_DAY" | "PER_SLOT";
 
 // 전시회 생성
 export interface ExhibitionsCreateRequestDto {
@@ -38,8 +11,9 @@ export interface ExhibitionsCreateRequestDto {
   description : string;
   startDate: string;
   endDate : string;
-  status?: STATUS;
-  capacityPolicy?: CAPACITYPOLICY;
+  status?: ExhibitionStatus;
+  capacityPolicy?: CapacityPolicy;
+  fileIds?: number[];
 }
 
 // 전시회 수정 
@@ -50,14 +24,14 @@ export interface ExhibitionsUpdateRequestDto {
 	description?: string;
 	startDate?: string;
   endDate?:string;
-  capacityPolicy?: CAPACITYPOLICY;
+  capacityPolicy?: CapacityPolicy;
 }
 
 // 전시회 상태 변경 
 export interface ExhibitionsStatusUpdateRequestDto {
   venueId: number;
   exhibitionId: number;
-	status: STATUS;
+	status: ExhibitionStatus;
 }
 
 // 전시회 이미지 파일 생성
@@ -71,4 +45,48 @@ export interface ExhibitionsFileUpdateRequestDto {
   exhibitionId: number;
   fileId: number;
   newFiles?: File[];  
+}
+
+
+// 전시회 전체 조회
+export interface ExhibitionSummaryDto {
+  venueId : number;
+  id: number;
+  title : string;
+  description : string;
+  startDate: string;
+  endDate: string;
+  status: ExhibitionStatus;
+  capacityPolicy : CapacityPolicy;
+  exhibitionImgURL:  string[];
+}
+
+// 전시회 단건 조회
+export interface ExhibitionDetailResponseDto {
+  venueId : number;
+  id: number;
+  title: string;
+  description : string;
+  startDate: string;
+  endDate : string;
+  status: ExhibitionStatus;
+  capacityPolicy : CapacityPolicy;
+  createdAt : string;
+  updatedAt : string;
+  exhibitionImgURL:  string[];
+  timeslots: string[];
+}
+
+export interface ExhibitionsSearchRequest {
+  keyword: string;
+  searchType: "name" | "address" | "all";
+  page?: number;
+  size?: number;
+  sort?: ExhibitionSort[];
+}
+
+export interface VenuePageRequest { 
+  page?: number;
+  size?: number;
+  sort?: ExhibitionSort[];
 }

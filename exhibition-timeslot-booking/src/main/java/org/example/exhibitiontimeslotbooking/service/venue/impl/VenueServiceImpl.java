@@ -122,10 +122,17 @@ public class VenueServiceImpl implements VenueService {
     // 검색어
     @Override
     @PreAuthorize("permitAll()")
-    public ResponseDto<PageResponseDto<VenueSummaryDto>> searchVenuesByName(String keyword, int page, int size, String[] sort) {
+    public ResponseDto<PageResponseDto<VenueSummaryDto>> searchVenuesByName(String keyword, String searchType, int page, int size, String[] sort) {
         Pageable venuePage = PageableUtils.buildPageable(page, size, sort, SortFields.VENUE_SORT);
 
-        Page<Venue> pageResult = venueRepository.searchVenuesByName(keyword, venuePage);
+        Page<Venue> pageResult;
+        if (searchType.equalsIgnoreCase("name")) {
+             pageResult = venueRepository.findByNameContaining(keyword, venuePage);
+        } else if (searchType.equalsIgnoreCase("address")) {
+             pageResult = venueRepository.findByAddressContaining(keyword, venuePage);
+        } else {
+             pageResult = venueRepository.findByNameContainingOrAddressContaining(keyword, venuePage);
+        }
 
         List<VenueSummaryDto> venueList = pageResult.getContent().stream()
                 .map(VenueSummaryDto::from)

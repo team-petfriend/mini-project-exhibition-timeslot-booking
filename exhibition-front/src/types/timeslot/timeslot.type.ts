@@ -23,6 +23,6 @@ export interface TimeslotCreateRequestDto {
 export interface TimeslotStatusChangeRequestDto {
   venueId: number;
   exhibitionId: number;
-  fileId: number;
+  slotId: number;
   status?: TIMESLOTSTATUS;
 }

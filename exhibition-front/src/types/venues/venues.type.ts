@@ -1,20 +1,19 @@
+import type { VenueSort } from "../common/utils/pageable/SortFields";
+
 // 전체 조회
 export interface VenueSummaryDto {
   venueId: number;
   name: string;
 	address:string;
-	imgUrl: string;
+	venueImgURL?: string;
 }
-
-// 전제 조회 배열 반환 
-export type VenueListResponseDto = VenueSummaryDto[];
 
 // 단건 조회
 export interface VenueDetailResponseDto {
   id: number;
   name: string;
   address?:string;
-  venueImgURL: string;
+  venueImgURL?: string;
   latitude?: number;
   longitude?: number;
   createdAt: string;
@@ -44,3 +43,16 @@ export interface VenuesFileCreateRequest {
   File: File;
 }
 
+export interface VenuesSearchRequest {
+  keyword: string;
+  searchType: "name" | "address" | "all";
+  page?: number;
+  size?: number;
+  sort?: VenueSort[];
+}
+
+export interface VenuePageRequest { 
+  page?: number;
+  size?: number;
+  sort?: VenueSort[];
+}
