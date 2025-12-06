@@ -7,6 +7,7 @@ import org.example.exhibitiontimeslotbooking.common.enums.exhibitions.Exhibition
 import org.example.exhibitiontimeslotbooking.common.utils.pageable.PageableUtils;
 import org.example.exhibitiontimeslotbooking.common.utils.pageable.SortFields;
 import org.example.exhibitiontimeslotbooking.dto.ResponseDto;
+import org.example.exhibitiontimeslotbooking.dto.exbitions_file.response.ExhibitionFileResponseDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsCreateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsStatusUpdateRequestDto;
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.request.ExhibitionsUpdateRequestDto;
@@ -14,9 +15,13 @@ import org.example.exhibitiontimeslotbooking.dto.exhibitions.response.Exhibition
 import org.example.exhibitiontimeslotbooking.dto.exhibitions.response.ExhibitionSummaryDto;
 import org.example.exhibitiontimeslotbooking.dto.page.response.PageResponseDto;
 import org.example.exhibitiontimeslotbooking.entity.exhibition.Exhibition;
+import org.example.exhibitiontimeslotbooking.entity.file.ExhibitionFile;
+import org.example.exhibitiontimeslotbooking.entity.file.FileInfo;
 import org.example.exhibitiontimeslotbooking.entity.venue.Venue;
 import org.example.exhibitiontimeslotbooking.exception.BusinessException;
 import org.example.exhibitiontimeslotbooking.repository.exhibition.ExhibitionRepository;
+import org.example.exhibitiontimeslotbooking.repository.file.ExhibitionFileRepository;
+import org.example.exhibitiontimeslotbooking.repository.file.FileInfoRepository;
 import org.example.exhibitiontimeslotbooking.repository.venue.VenueRepository;
 import org.example.exhibitiontimeslotbooking.service.exhibition.ExhibitionService;
 import org.springframework.data.domain.Page;
@@ -25,6 +30,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,31 +41,53 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     private final VenueRepository venueRepository;
     private final ExhibitionRepository exhibitionRepository;
+    private final FileInfoRepository fileInfoRepository;
+    private final ExhibitionFileRepository exhibitionFileRepository;
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDto<ExhibitionDetailResponseDto> createExhibition(Long venueId, ExhibitionsCreateRequestDto request) {
+        @Override
+        @Transactional
+        @PreAuthorize("hasRole('ADMIN')")
+        public ResponseDto<ExhibitionDetailResponseDto> createExhibition(Long venueId, ExhibitionsCreateRequestDto request) {
 
-        Venue venue = venueRepository.findById(venueId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
+            Venue venue = venueRepository.findById(venueId)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.VENUE_NOT_FOUND));
 
-        Exhibition exhibition = Exhibition.builder()
-                .title(request.title())
-                .description(request.description())
-                .startDate(request.startDate())
-                .endDate(request.endDate())
-                .exhibitionStatus(ExhibitionStatus.SCHEDULED)
-                .capacityPolicy(CapacityPolicy.PER_SLOT)
-                .venue(venue)
-                .build();
+            Exhibition exhibition = Exhibition.builder()
+                    .title(request.title())
+                    .description(request.description())
+                    .startDate(request.startDate())
+                    .endDate(request.endDate())
+                    .exhibitionStatus(ExhibitionStatus.SCHEDULED)
+                    .capacityPolicy(CapacityPolicy.PER_SLOT)
+                    .venue(venue)
+                    .build();
 
-        Exhibition saved = exhibitionRepository.save(exhibition);
+            Exhibition saved = exhibitionRepository.save(exhibition);
 
-        ExhibitionDetailResponseDto data = ExhibitionDetailResponseDto.from(saved);
+            int order = 0;
+            if (request.fileIds() != null && !request.fileIds().isEmpty()) {
+                List<FileInfo> fileInfos = fileInfoRepository.findAllById(request.fileIds());
 
-        return ResponseDto.success("전시회가 생성되었습니다.", data);
-    }
+
+                if (fileInfos.size() != request.fileIds().size()) {
+                    throw new BusinessException(ErrorCode.FILE_NOT_FOUND);
+                }
+
+                for (FileInfo file : fileInfos) {
+                    ExhibitionFile ef = ExhibitionFile.builder()
+                            .exhibition(saved)
+                            .fileInfo(file)
+                            .displayOrder(order++)
+                            .build();
+
+                    exhibitionFileRepository.save(ef);
+                }
+            }
+
+            ExhibitionDetailResponseDto data = ExhibitionDetailResponseDto.from(saved);
+
+            return ResponseDto.success("전시회가 생성되었습니다.", data);
+        }
     
     @Override
     @PreAuthorize("permitAll()")

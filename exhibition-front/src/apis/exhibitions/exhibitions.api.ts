@@ -1,11 +1,9 @@
-import type { ExhibitionsCreateRequestDto, ExhibitionDetailResponseDto, ExhibitionsStatusUpdateRequestDto, ExhibitionsUpdateRequestDto, ExhibitionSummaryDto } from "@/types/exhibitions/exhibitions.type";
+import type { ExhibitionsCreateRequestDto, ExhibitionDetailResponseDto, ExhibitionsStatusUpdateRequestDto, ExhibitionsUpdateRequestDto, ExhibitionSummaryDto, ExhibitionsPageRequest, ExhibitionsSearchRequest } from "@/types/exhibitions/exhibitions.type";
 import { publicApi } from "../common/axiosInstance";
 import type { ResponseDto } from "@/types/common/ResponseDto";
 import { VENUES_EXHIBITIONS_PATH } from "./exhibitions.path";
 import { EXHIBITIONS_FILE_PATH } from "./exhibitions.file";
-import type { TimeslotCreateRequestDto, TimeslotDetailResponseDto } from "@/types/timeslot/timeslot.type";
 import type { PageResponseDto } from "@/types/common/utils/pageable/PageResponseDto";
-import type { ExhibitionSort, VenueSort } from "@/types/common/utils/pageable/SortFields";
 
 export const exhibitionApi = {
 
@@ -24,11 +22,11 @@ export const exhibitionApi = {
   },
 
   // 전체 조회
-  getAllExhibition: async (venueId: number, page: number, size: number, sort: ExhibitionSort[]) : Promise<PageResponseDto<ExhibitionSummaryDto>> => {
+  getAllExhibition: async (venueId: number, params: ExhibitionsPageRequest) : Promise<PageResponseDto<ExhibitionSummaryDto>> => {
     const res = await publicApi.get<ResponseDto<PageResponseDto<ExhibitionSummaryDto>>> (
       VENUES_EXHIBITIONS_PATH.EXHIBITIONS(venueId),
       {
-        params: {page, size, sort}
+        params
       }
     );
 
@@ -84,11 +82,11 @@ export const exhibitionApi = {
   },
 
   // 검색
-  searchExhibition: async (venueId:number, keyword: string, page: number, size: number, sort: ExhibitionSort[]): Promise<PageResponseDto<ExhibitionSummaryDto>> => {
+  searchExhibition: async (venueId:number, params: ExhibitionsSearchRequest): Promise<PageResponseDto<ExhibitionSummaryDto>> => {
     const res = await publicApi.get<ResponseDto<PageResponseDto<ExhibitionSummaryDto>>> (
       VENUES_EXHIBITIONS_PATH.SEARCH(venueId,),
       {
-        params: {keyword, page, size, sort}
+        params
       }
     );
     

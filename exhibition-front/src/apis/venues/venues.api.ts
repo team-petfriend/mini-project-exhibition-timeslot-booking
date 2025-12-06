@@ -1,10 +1,9 @@
-import type { VenuesCreateRequestDto, VenueDetailResponseDto, VenuesUpdateRequestDto, VenueSummaryDto } from "@/types/venues/venues.type";
+import type { VenuesCreateRequestDto, VenueDetailResponseDto, VenuesUpdateRequestDto, VenueSummaryDto, VenuesSearchRequest, VenuePageRequest } from "@/types/venues/venues.type";
 import { publicApi } from "../common/axiosInstance";
 import type { ResponseDto } from "@/types/common/ResponseDto";
 import { VENUES_PATH } from "./venues.path";
 import { VENUES_FILE_PATH } from "./venues.file";
 import type { PageResponseDto } from "@/types/common/utils/pageable/PageResponseDto";
-import type { VenueSort } from "@/types/common/utils/pageable/SortFields";
 
 export const venueApi = {
   // 생성
@@ -20,11 +19,11 @@ export const venueApi = {
   },
 
   // 전체 조회
-  getAllVenues: async (page:number, size:number, sort: VenueSort[]): Promise<PageResponseDto<VenueSummaryDto>> => {
+  getAllVenues: async (params: VenuePageRequest): Promise<PageResponseDto<VenueSummaryDto>> => {
     const res = await publicApi.get<ResponseDto<PageResponseDto<VenueSummaryDto>>> (
       VENUES_PATH.LIST,
     {
-      params: { page, size, sort},
+      params
     }  
     );
     if ( !res.data.data ) {
@@ -66,9 +65,18 @@ export const venueApi = {
     }
   },
 
-  searchVenuesByName: async (keyword: string, page:number, size: number, sort: VenueSort[]): Promise<PageResponseDto<VenueSummaryDto>> => {
-    const res = await publicApi.get<ResponseDto<PageResponseDto<VenueSummaryDto>>>
-  }
+  searchVenuesByName: async (params: VenuesSearchRequest): Promise<PageResponseDto<VenueSummaryDto>> => {
+    const res = await publicApi.get<ResponseDto<PageResponseDto<VenueSummaryDto>>> (
+      VENUES_PATH.SEARCH,
+      {
+        params
+      }
+    );
+    if(!res.data.data) {
+      throw new Error("venue의 데이터를 불러오지 못했습니다.")
+    }
+    return res.data.data;
+  },
 
   // venue 파일 생성
   uploadFile: async (id: number, formData: FormData ) : Promise<void> => {
