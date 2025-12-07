@@ -131,7 +131,7 @@ public class VenueServiceImpl implements VenueService {
         } else if (searchType.equalsIgnoreCase("address")) {
              pageResult = venueRepository.findByAddressContaining(keyword, venuePage);
         } else {
-             pageResult = venueRepository.findByNameContainingOrAddressContaining(keyword, venuePage);
+             pageResult = venueRepository.findByNameContainingOrAddressContaining(keyword, keyword, venuePage);
         }
 
         List<VenueSummaryDto> venueList = pageResult.getContent().stream()
