@@ -85,7 +85,7 @@ export interface ExhibitionsSearchRequest {
   sort?: ExhibitionSort[];
 }
 
-export interface VenuePageRequest { 
+export interface ExhibitionsPageRequest { 
   page?: number;
   size?: number;
   sort?: ExhibitionSort[];

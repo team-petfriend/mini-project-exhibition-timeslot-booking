@@ -210,7 +210,8 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
         Pageable pageable = PageableUtils.buildPageable(page, size, sort, SortFields.EXHIBITION_SORTS);
 
-        Page<Exhibition> pageResult = exhibitionRepository.searchExhibitionByKeyword(venue.getId(), keyword, pageable);
+        String searchKeyword = "%" + keyword + "%";
+        Page<Exhibition> pageResult = exhibitionRepository.searchExhibitionByKeyword(venue.getId(), searchKeyword, pageable);
 
         List<ExhibitionSummaryDto> content = pageResult.getContent().stream()
                 .map(ExhibitionSummaryDto::from)
