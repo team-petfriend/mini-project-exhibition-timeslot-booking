@@ -48,27 +48,6 @@ public class VenueServiceImpl implements VenueService {
         return ResponseDto.success("전시장이 생성되었습니다.", data);
     }
 
-    @Override
-    @PreAuthorize("permitAll()")
-    public ResponseDto<PageResponseDto<VenueSummaryDto>> getAllVenues(int page, int size, String[] sort) {
-        Pageable venuePage = PageableUtils.buildPageable(page, size, sort, SortFields.VENUE_SORT);
-
-        Page<Venue> pageResult = venueRepository.findAll(venuePage);
-
-        List<VenueSummaryDto> venusList = pageResult.getContent().stream()
-                .map(VenueSummaryDto::from)
-                .toList();
-
-        PageResponseDto<VenueSummaryDto> data = PageResponseDto.<VenueSummaryDto>builder()
-                .content(venusList)
-                .currentPage(pageResult.getNumber())
-                .totalPages(pageResult.getTotalPages())
-                .totalElements(pageResult.getTotalElements())
-                .build();
-
-        return ResponseDto.success("전체 조회를 성공했습니다.", data);
-    }
-
     // 조회
     @Override
     @PreAuthorize("permitAll()")
@@ -117,36 +96,5 @@ public class VenueServiceImpl implements VenueService {
         venueRepository.delete(venue);
 
         return ResponseDto.success("전시장이 삭제되었습니다.", null);
-    }
-
-    // 검색어
-    @Override
-    @PreAuthorize("permitAll()")
-    public ResponseDto<PageResponseDto<VenueSummaryDto>> searchVenuesByName(String keyword, String searchType, int page, int size, String[] sort) {
-        Pageable venuePage = PageableUtils.buildPageable(page, size, sort, SortFields.VENUE_SORT);
-
-        Page<Venue> pageResult;
-        if (searchType.equalsIgnoreCase("name")) {
-             pageResult = venueRepository.findByNameContaining(keyword, venuePage);
-        } else if (searchType.equalsIgnoreCase("address")) {
-             pageResult = venueRepository.findByAddressContaining(keyword, venuePage);
-        } else {
-             pageResult = venueRepository.findByNameContainingOrAddressContaining(keyword, keyword, venuePage);
-        }
-
-        List<VenueSummaryDto> venueList = pageResult.getContent().stream()
-                .map(VenueSummaryDto::from)
-                .toList();
-
-        PageResponseDto<VenueSummaryDto> data = PageResponseDto.<VenueSummaryDto>builder()
-                .content(venueList)
-                .currentPage(pageResult.getNumber())
-                .totalPages(pageResult.getTotalPages())
-                .totalElements(pageResult.getTotalElements())
-                .first(pageResult.isFirst())
-                .last(pageResult.isLast())
-                .build();
-
-        return ResponseDto.success("검색어를 찾았습니다.", data);
     }
 }

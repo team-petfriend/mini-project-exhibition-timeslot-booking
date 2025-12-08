@@ -51,7 +51,6 @@ public class Venue extends BaseTimeEntity {
         this.longitude = longitude;
     }
 
-
     public void changedFile(FileInfo newFile) {
         this.fileInfo = newFile;
     }

@@ -87,18 +87,4 @@ public class VenueController {
 
         return ResponseEntity.ok(data);
     }
-
-    // 전시장 검색
-    @GetMapping(ApiMappingPattern.Venues.SEARCH)
-    public ResponseEntity<ResponseDto<PageResponseDto<VenueSummaryDto>>> searchVenuesByName(
-        @RequestParam("keyword") @NotBlank(message = "검색 키워드는 비워질 수 없습니다.") String keyword,
-        @RequestParam("searchType") @NotBlank(message = "검색타입은 비워질 수 없습니다.") String searchType,
-        @RequestParam(defaultValue = "0") @Min(0) int page,
-        @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
-        @RequestParam(required = false) String[] sort
-    ) {
-        ResponseDto<PageResponseDto<VenueSummaryDto>> data = venueService.searchVenuesByName(keyword, searchType, page, size, sort);
-
-        return ResponseEntity.ok(data);
-    }
 }
