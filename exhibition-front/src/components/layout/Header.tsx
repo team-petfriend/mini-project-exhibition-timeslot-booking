@@ -1,32 +1,30 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
-import React from 'react'
-
-
+import { css } from "@emotion/react";
+import React from "react";
 
 function Header() {
   return (
-  <header css={headerStyle}>
-    <div className="container">
-        <div className='left'>
-        <p className='logo'>ARTMARK</p>
+    <header css={headerStyle}>
+      <div className="container">
+        <div className="left">
+          <p className="logo">ARTMARK</p>
+        </div>
+        <div className="mid">
+          <p>HOME</p>
+          <p>VENUE</p>
+          <p>EXHIBITION</p>
+          <p>EVENT</p>
+        </div>
+        <div className="right">
+          <p>로그인</p>
+          <p>회원가입</p>
+        </div>
       </div>
-      <div className='mid'>
-        <p>HOME</p>
-        <p>VENUE</p>
-        <p>EXHIBITION</p>
-        <p>EVENT</p>
-      </div>
-      <div className='right'>
-        <p>로그인</p>
-        <p>회원가입</p>
-      </div>
-    </div>
-  </header>
-  )
+    </header>
+  );
 }
 
-export default Header
+export default Header;
 
 const headerStyle = css`
   padding: 0 var(--space-md);
@@ -41,18 +39,19 @@ const headerStyle = css`
     justify-content: space-between;
   }
 
-  .left, .mid, .right {
-      display: flex;
-      align-items: center; 
-      gap: var(--space-sm); 
-      height: var(--header-height); 
-      cursor: pointer;
+  .left,
+  .mid,
+  .right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    height: var(--header-height);
+    cursor: pointer;
   }
 
   .left {
     gap: var(--space-xl);
   }
-
 
   .logo {
     font-family: "Bungee", sans-serif;
@@ -66,7 +65,6 @@ const headerStyle = css`
   }
 
   .mid p {
-    
     &:hover {
       color: var(--color-primary-hover);
     }

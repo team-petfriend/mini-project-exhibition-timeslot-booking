@@ -19,5 +19,4 @@ public interface VenueService {
     ResponseDto<VenueDetailResponseDto> updateVenue(Long venueId, VenuesUpdateRequestDto request);
     ResponseDto<Void> deleteVenue(Long venueId);
     ResponseDto<PageResponseDto<VenueSummaryDto>> getAllVenues(@Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
-    ResponseDto<PageResponseDto<VenueSummaryDto>> searchVenuesByName(@NotBlank(message = "검색 키워드는 비워질 수 없습니다.") String keyword, @NotBlank(message = "검색타입은 비워질 수 없습니다.") String searchType, @Min(0) int page, @Min(1) @Max(100) int size, String[] sort);
 }

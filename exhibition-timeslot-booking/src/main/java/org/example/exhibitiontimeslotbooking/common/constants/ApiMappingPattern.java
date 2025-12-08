@@ -43,7 +43,6 @@ public class ApiMappingPattern {
 
         public static final String VENUE_FILE =  ID_ONLY + "/file";
         public static final String VENUE_FILE_ID = VENUE_FILE + "/{fileId}";
-        public static final String SEARCH = ROOT + "/search";
     }
 
     public static final class Exhibitions {
